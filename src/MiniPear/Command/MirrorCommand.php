@@ -75,14 +75,28 @@ class MirrorCommand extends \CLIFramework\Command
             <servers> ... </servers>
          
          */
-        $nodes = $dom->getElementsByTagName('suggestedalias');
-        $node = $nodes->item(0);
+        $node = $dom->getElementsByTagName('suggestedalias')->item(0);
 
         $alias = $node->firstChild->nodeValue;
         $alias = $alias . '_local';
 
         $node->removeChild($node->firstChild);
         $node->appendChild(new \DOMText( $alias ));
+        $logger->info("Alias => $alias");
+
+        /**
+         * alter the channel host to {{alias}}.dev 
+         *
+         *     alias pear => host pear_local.dev
+         */
+        $node = $dom->getElementsByTagName('name')->item(0);
+        $localHostname = $alias . '.dev';
+        $node->removeChild($node->firstChild);
+        $node->appendChild(new \DOMText( $localHostname ));
+        $logger->info("Hostname => $localHostname");
+
+
+        /* save xml document */
         $xmlContent = $dom->saveXML();
 
 
