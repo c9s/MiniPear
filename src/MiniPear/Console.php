@@ -7,12 +7,9 @@ class Console extends ConsoleApplication
 
     function init()
     {
-
+        parent::init();
+        $this->registerCommand('mirror');
     }
 
-
 }
-
-
-
 
