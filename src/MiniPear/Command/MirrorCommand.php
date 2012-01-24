@@ -1,5 +1,7 @@
 <?php
 namespace MiniPear\Command;
+use SimpleXMLElement;
+use MiniPear\CurlDownloader;
 
 class MirrorCommand extends \CLIFramework\Command
 {
@@ -40,9 +42,47 @@ class MirrorCommand extends \CLIFramework\Command
         $d = new CurlDownloader;
         $xmlContent = $d->fetch( $channelXmlUrl );
 
-        /* alter the channel alias with suffix _local */
+        /* load xml with DOMDocument */
+        $dom = new \DOMDocument('1.0');
+        $dom->preserveWhiteSpace = false;
+        $dom->formatOutput = true;
+        $dom->loadXML($xmlContent);
 
 
+        /**
+         * xxx: ask people which server to mirror ?
+         */
+        $serversNode = $dom->getElementsByTagName('servers')->item(0);
+        $primaryServerNode = $serversNode->getElementsByTagName('primary')->item(0);
+        $mirrorNodes = $serversNode->getElementsByTagName('mirror');
+        $mirrors = array();
+
+        foreach( $mirrorNodes as $mirrorNode ) {
+            $mirrors[] = $mirrorNode;
+            $mirrorHost = $mirrorNode->getAttribute('host');
+            $logger->info( "Found mirror site: " . $mirrorHost );
+        }
+
+
+        /**
+         alter the channel alias with suffix _local 
+
+         <channel ...>
+            <name>pear.php.net</name>
+            <suggestedalias>pear</suggestedalias>
+            <summary>PHP Extension and Application Repository</summary>
+            <servers> ... </servers>
+         
+         */
+        $nodes = $dom->getElementsByTagName('suggestedalias');
+        $node = $nodes->item(0);
+
+        $alias = $node->firstChild->nodeValue;
+        $alias = $alias . '_local';
+
+        $node->removeChild($node->firstChild);
+        $node->appendChild(new \DOMText( $alias ));
+        $xmlContent = $dom->saveXML();
 
     }
 

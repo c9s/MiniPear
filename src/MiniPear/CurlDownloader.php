@@ -53,7 +53,7 @@ class CurlDownloader
         /* use progress */
         if( $this->progress ) {
             curl_setopt($ch, CURLOPT_NOPROGRESS, false);
-            curl_setopt($ch, CURLOPT_PROGRESSFUNCTION, 'curl_progressbar_cb'));
+            curl_setopt($ch, CURLOPT_PROGRESSFUNCTION, 'curl_progressbar_cb');
             curl_setopt($ch, CURLOPT_BUFFERSIZE, 128 );
         }
 
