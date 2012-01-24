@@ -39,6 +39,7 @@ class MirrorCommand extends \CLIFramework\Command
          * xxx: support https and authentication ?
          * */
         $channelXmlUrl = 'http://' . $host . '/channel.xml';
+        $logger->info( "Fetching $channelXmlUrl ..." );
         $d = new CurlDownloader;
         $xmlContent = $d->fetch( $channelXmlUrl );
 
@@ -60,7 +61,7 @@ class MirrorCommand extends \CLIFramework\Command
         foreach( $mirrorNodes as $mirrorNode ) {
             $mirrors[] = $mirrorNode;
             $mirrorHost = $mirrorNode->getAttribute('host');
-            $logger->info( "Found mirror site: " . $mirrorHost );
+            $logger->info( "=> Found mirror site: " . $mirrorHost , 1 );
         }
 
 
@@ -83,6 +84,9 @@ class MirrorCommand extends \CLIFramework\Command
         $node->removeChild($node->firstChild);
         $node->appendChild(new \DOMText( $alias ));
         $xmlContent = $dom->saveXML();
+
+
+
 
     }
 
