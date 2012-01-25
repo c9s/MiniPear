@@ -98,12 +98,13 @@ class PearChannel
      */
     public function fetchPackagesXml()
     {
-        $this->packagesXml = $this->requestXml($packagesXmlUrl);
+        $xml = $this->packagesXml = $this->requestXml($this->packagesXmlUrl);
 
         // $packagesXml->getElementsByTagName('c')->item(0);
         foreach( $this->packagesXml->getElementsByTagName('p') as $p ) {
 
         }
+        return $xml;
     }
 
 }

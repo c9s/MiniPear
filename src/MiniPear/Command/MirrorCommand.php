@@ -3,6 +3,7 @@ namespace MiniPear\Command;
 // use SimpleXMLElement;
 use DOMDocument;
 use MiniPear\CurlDownloader;
+use MiniPear\Utils;
 
 
 class MirrorCommand extends \CLIFramework\Command
@@ -20,7 +21,7 @@ class MirrorCommand extends \CLIFramework\Command
 
         /* read minipear config */
         $config = \MiniPear\Config::getInstance();
-        $localChannelRoot = $config->getChannelRoot($host);
+        $root = $config->getChannelRoot($host);
 
 
         $pearChannel = new \MiniPear\PearChannel( $host );
@@ -33,7 +34,7 @@ class MirrorCommand extends \CLIFramework\Command
          *
          * @see http://pear.php.net/manual/en/guide.migrating.channels.xml.php
          * */
-        $logger->info("Channel root: $localChannelRoot" );
+        $logger->info("Channel root: $root" );
 
 
         /**
@@ -79,7 +80,7 @@ class MirrorCommand extends \CLIFramework\Command
 
             /* save xml document */
             $xmlContent = $dom->saveXML();
-            $channelXmlPath = $localChannelRoot . DIRECTORY_SEPARATOR . 'channel.xml';
+            $channelXmlPath = $root . DIRECTORY_SEPARATOR . 'channel.xml';
             $logger->debug('Saving ' . $channelXmlPath );
             file_put_contents( $channelXmlPath, $xmlContent );
         };
@@ -91,10 +92,14 @@ class MirrorCommand extends \CLIFramework\Command
          */
 
         /** get packages */
-        $pearChannel->fetchPackagesXml();
+        $xml = $pearChannel->fetchPackagesXml();
 
-        /** store packagesXml into channel root */
+        /** store packagesXml into channel rest root */
+        Utils::mkpath( $root . DIRECTORY_SEPARATOR . 'rest' . DIRECTORY_SEPARATOR . 'p' );
 
+        file_put_contents( 
+            $root. DIRECTORY_SEPARATOR . 'rest' . DIRECTORY_SEPARATOR . 'p' . DIRECTORY_SEPARATOR . 'packages.xml',
+            $dom->saveXML());
 
         
 
