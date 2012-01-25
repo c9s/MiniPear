@@ -4,6 +4,8 @@ namespace MiniPear\Command;
 use DOMDocument;
 use MiniPear\CurlDownloader;
 use MiniPear\Utils;
+use Exception;
+
 
 
 class MirrorCommand extends \CLIFramework\Command
@@ -96,6 +98,12 @@ class MirrorCommand extends \CLIFramework\Command
 
             /* save xml document */
             $xmlContent = $dom->saveXML();
+
+            // xxx: because of the stupid PEAR uses a stupid pcre pattern to 
+            // validate channel version, we have to fix this by hands.
+            $xmlContent = str_replace(' version="1.0" ',' ', $xmlContent );
+            $xmlContent = str_replace('<channel ','<channel version="1.0" ', $xmlContent );
+            
             $channelXmlPath = $root . DIRECTORY_SEPARATOR . 'channel.xml';
             $logger->debug('Saving ' . $channelXmlPath );
             file_put_contents( $channelXmlPath, $xmlContent );
@@ -138,6 +146,8 @@ class MirrorCommand extends \CLIFramework\Command
             }
         }
 
+
+
         /** 
          * download packages for /rest/r
          * release info:
@@ -155,6 +165,14 @@ class MirrorCommand extends \CLIFramework\Command
          *  - package.{version}.xml
          *  - deps.{version}.txt
          */
+
+        /**
+         * @var array (
+         *    'Package_Name' => [ versions ... ],
+         * )
+         */
+        $packageVersions = array();
+
         $logger->info('Mirroring package info section...');
         foreach( $packageList as $packageName ) {
             $base = $pearChannel->channelRestBaseUrl . '/r/' . strtolower($packageName); // . '/info.xml';
@@ -162,8 +180,16 @@ class MirrorCommand extends \CLIFramework\Command
             $stabilities = array();
             $versions = array();
 
-            // parse allreleases.xml for package versions
-            $xml = $pearChannel->requestXml( $base . '/allreleases2.xml' );
+            $xml = null;
+
+            try {
+                // parse allreleases.xml for package versions
+                $xml = $pearChannel->requestXml( $base . '/allreleases2.xml' );
+            } catch( Exception $e ) {
+                $logger->error( $e->getMessage() );
+                continue;
+            }
+
             $nodes = $xml->getElementsByTagName('r');
             foreach( $nodes as $n ) {
                 $version = $n->getElementsByTagName('v')->item(0)->nodeValue;
@@ -193,7 +219,32 @@ class MirrorCommand extends \CLIFramework\Command
             foreach( $files as $file ) {
                 Utils::mirror_file(  $base . '/' . $file , $root );
             }
+
+            // save Package version
+            $packageVersions[ $packageName ] = $versions;
         }
+
+
+        /**
+         * foreach package with different verions, 
+         * download them all.
+         */
+        foreach( $packageVersions as $packageName => $versions ) {
+            $base = $pearChannel->channelBaseUrl . '/get/';
+            $formats = array('tar','tgz');
+            $urls = array();
+            foreach( $versions as $version ) {
+                foreach( $formats as $format) {
+                    $urls[] = $base . $packageName . '-' . $version . '.' . $format;
+                }
+            }
+
+            foreach( $urls as $url ) {
+                Utils::mirror_file( $url, $root );
+            }
+        }
+
+
 
         /**
          * Print suggested Apache configuration for this 

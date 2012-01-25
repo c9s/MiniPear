@@ -20,9 +20,9 @@ class Config
         $this->miniPearHome = getenv('HOME') . DIRECTORY_SEPARATOR . '.minipear';
         $this->miniPearChannelDir = $this->miniPearHome . DIRECTORY_SEPARATOR . 'pear'. DIRECTORY_SEPARATOR .'channels';
         if( ! file_exists( $this->miniPearHome ) )
-            mkdir( $this->miniPearHome , 755 , true );
+            mkdir( $this->miniPearHome , 0755 , true );
         if( ! file_exists( $this->miniPearChannelDir ) )
-            mkdir( $this->miniPearChannelDir , 755 , true );
+            mkdir( $this->miniPearChannelDir , 0755 , true );
 
         $configFile = $this->miniPearHome . DIRECTORY_SEPARATOR . 'minipear.ini';
 

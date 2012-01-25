@@ -13,30 +13,94 @@ namespace MiniPear;
  */
 use Exception;
 
-/** print progressbar **/
-function curl_progressbar_cb($downloadSize, $downloaded, $uploadSize, $uploaded)
+class CurlProgressStar
 {
-    // print progress bar
-    $percent = ($downloaded > 0 ? (float) ($downloaded / $downloadSize) : 0.0 );
-    $terminalWidth = 70;
-    $sharps = (int) $terminalWidth * $percent;
+    public $stars = array('-','\\','|','/');
+    public $i = 0;
+    public $url;
+    public $done = false;
 
-    # echo "\n" . $sharps. "\n";
-    print "\r" . 
-        str_repeat( '#' , $sharps ) . 
-        str_repeat( ' ' , $terminalWidth - $sharps ) . 
-        sprintf( ' %4d B %5d%%' , $downloaded , $percent * 100 );
+    public function progress($downloadSize, $downloaded, $uploadSize, $uploaded)
+    {
+        /* 4kb */
+        if( $downloadSize < 8000 ) 
+            return;
 
-    if( $downloadSize === $downloaded )
-        print "\n";
+        if( $this->done ) {
+            return;
+        }
+
+        // printf("%s % 4d%%", $s , $percent );
+
+        if( $downloadSize != 0 && $downloadSize === $downloaded ) {
+            $this->done = true;
+            printf("\r\t%-60s                           \n",$this->url);
+        } else {
+            $percent = ($downloaded > 0 ? (float) ($downloaded / $downloadSize) : 0.0 );
+            if( ++$this->i > 3 )
+                $this->i = 0;
+            $s = $this->stars[ $this->i ];
+
+            /* 8 + 1 + 60 + 1 + 1 + 1 + 5 = */
+            printf("\r\tFetching %-60s %s % .1f%% %s", $this->url, $s, $percent * 100, Utils::pretty_size($downloaded) );
+        }
+    }
 }
+
+class CurlProgressBar 
+{
+    public $done = false;
+    public $url;
+
+    /** print progressbar **/
+    public function progress($downloadSize, $downloaded, $uploadSize, $uploaded)
+    {
+        if( $this->done )
+            return;
+
+        // print progress bar
+        $percent = ($downloaded > 0 ? (float) ($downloaded / $downloadSize) : 0.0 );
+        $terminalWidth = 70;
+        $sharps = (int) $terminalWidth * $percent;
+
+        # echo "\n" . $sharps. "\n";
+        print "\r" . 
+            str_repeat( '#' , $sharps ) . 
+            str_repeat( ' ' , $terminalWidth - $sharps ) . 
+            sprintf( ' %4d B %5d%%' , $downloaded , $percent * 100 );
+
+        if( $downloadSize != 0 && $downloadSize === $downloaded ) {
+            $this->done = true;
+            print "\n";
+        }
+    }
+}
+
 
 
 class CurlDownloader 
 {
     public $progress = false;
+    public $timeout = 10;
 
-    function fetch($url)
+    public function fetchXml($url)
+    {
+        // $this->logger->info( "Fetching $url ..." );
+        $xmlContent = $this->fetch( $url );
+
+        if( strpos($xmlContent,'<?xml') === false )
+            throw new Exception( "$url is not an XML format content." );
+
+        /* load xml with DOMDocument */
+        $dom = new \DOMDocument('1.0');
+        $dom->preserveWhiteSpace = false;
+        $dom->formatOutput = true;
+        if( @$dom->loadXML($xmlContent) === false )
+            throw new Exception( 'XML error: ' . $url  ); 
+        return $dom;
+    }
+
+    public function fetch($url)
     {
         $options = array();
         $defaults = array( 
@@ -45,21 +109,34 @@ class CurlDownloader
             CURLOPT_FRESH_CONNECT => 1, 
             CURLOPT_RETURNTRANSFER => 1, 
             CURLOPT_FORBID_REUSE => 1, 
-            CURLOPT_TIMEOUT => 10, 
+            CURLOPT_TIMEOUT => $this->timeout, 
         ); 
         $ch = curl_init(); 
         curl_setopt_array($ch, ($options + $defaults)); 
 
         /* use progress */
         if( $this->progress ) {
+            if( $this->progress === true ) {
+                $this->progress = new CurlProgressBar;
+            }
+            $this->progress->url = $url;
             curl_setopt($ch, CURLOPT_NOPROGRESS, false);
-            curl_setopt($ch, CURLOPT_PROGRESSFUNCTION, 'curl_progressbar_cb');
-            curl_setopt($ch, CURLOPT_BUFFERSIZE, 128 );
+            curl_setopt($ch, CURLOPT_PROGRESSFUNCTION, array($this->progress,'progress') );
+            curl_setopt($ch, CURLOPT_BUFFERSIZE, 64 );
         }
 
-        if( ! $result = curl_exec($ch)) { 
+        /*
+        if( ! $result = curl_exec($ch))
+            return false;
+        if(curl_getinfo($ch, CURLINFO_HTTP_CODE) !== 400 )
+            return false;
+         */
+
+        if( ! $result = curl_exec($ch))
             throw new Exception( $url . ":" . curl_error($ch) );
-        }
+        if( curl_getinfo($ch, CURLINFO_HTTP_CODE) === 400 )
+            throw new Exception( "404 Not Found." );
+
         curl_close($ch); 
         return $result;
     }

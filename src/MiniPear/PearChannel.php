@@ -1,6 +1,7 @@
 <?php
 namespace MiniPear;
 use DOMDocument;
+use Exception;
 use MiniPear\CurlDownloader;
 
 class PearChannel
@@ -34,21 +35,16 @@ class PearChannel
         $this->channelXmlUrl = $this->channelBaseUrl . '/channel.xml';
         $this->downloader = new CurlDownloader;
 
+        // $progress = new CurlProgressStar;
+        // $this->downloader->progress = $progress;
+
         // load channel.xml
     }
 
 
     public function requestXml($url)
     {
-        // $this->logger->info( "Fetching $url ..." );
-        $xmlContent = $this->downloader->fetch( $url );
-
-        /* load xml with DOMDocument */
-        $dom = new DOMDocument('1.0');
-        $dom->preserveWhiteSpace = false;
-        $dom->formatOutput = true;
-        $dom->loadXML($xmlContent);
-        return $dom;
+        return $this->downloader->fetchXml( $url );
     }
 
     public function fetchChannelXml()

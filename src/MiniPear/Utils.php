@@ -11,6 +11,17 @@ class Utils
             mkdir( $path , 0755 , true );
     }
 
+    static function pretty_size($bytes)
+    {
+        if( $bytes > 1000000 ) {
+            return (int)( $bytes / 1000000 ) . 'M';
+        }
+        elseif( $bytes > 1000 ) {
+            return (int)( $bytes / 1000 ) . 'K';
+        }
+        return (int) ($bytes) . 'B';
+    }
+
     static function mirror_file($url,$root)
     {
         self::$logger->info( $url , 1 );
@@ -25,11 +36,19 @@ class Utils
             return;
 
         $d = new CurlDownloader;
+        $progress = new CurlProgressStar;
+        $d->progress = $progress;
+
         $content = $d->fetch( $url );
-        if( $content ) {
-            if( file_put_contents( $localFilePath , $content ) !== false )
-                return true;
+        if( ! $content ) {
+            self::$logger->error( $url . ' failed.' );
+            return false;
         }
+
+        if( file_put_contents( $localFilePath , $content ) !== false )
+            return true;
+
+        self::$logger->error( "File write failed: $localFilePath" );
         return false;
     }
 
