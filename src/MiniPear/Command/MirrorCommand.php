@@ -3,6 +3,9 @@ namespace MiniPear\Command;
 use SimpleXMLElement;
 use MiniPear\CurlDownloader;
 
+
+
+
 class MirrorCommand extends \CLIFramework\Command
 {
 
@@ -34,9 +37,12 @@ class MirrorCommand extends \CLIFramework\Command
             $config = parse_ini_file( $configFile, true );
         }
 
-        /* get channel.xml from host
+        /**
+         * Get channel.xml from host
          *
          * xxx: support https and authentication ?
+         *
+         * @see http://pear.php.net/manual/en/guide.migrating.channels.xml.php
          * */
         $channelXmlUrl = 'http://' . $host . '/channel.xml';
         $logger->info( "Fetching $channelXmlUrl ..." );
@@ -66,7 +72,11 @@ class MirrorCommand extends \CLIFramework\Command
 
 
         /**
-         alter the channel alias with suffix _local 
+         alter the channel alias with suffix -local 
+
+         Note that "PEAR" runs `validate` on ChannelFile class, 
+         domain names like: `pear.php.net`,`php-dev` is valid,
+         domain names like: `pear_local.dev` is invalid.
 
          <channel ...>
             <name>pear.php.net</name>
@@ -78,7 +88,7 @@ class MirrorCommand extends \CLIFramework\Command
         $node = $dom->getElementsByTagName('suggestedalias')->item(0);
 
         $alias = $node->firstChild->nodeValue;
-        $alias = $alias . '_local';
+        $alias = $alias . '-local';
 
         $node->removeChild($node->firstChild);
         $node->appendChild(new \DOMText( $alias ));
@@ -87,7 +97,7 @@ class MirrorCommand extends \CLIFramework\Command
         /**
          * alter the channel host to {{alias}}.dev 
          *
-         *     alias pear => host pear_local.dev
+         *     alias pear => host pear-local.dev
          */
         $node = $dom->getElementsByTagName('name')->item(0);
         $localHostname = $alias . '.dev';
@@ -96,12 +106,21 @@ class MirrorCommand extends \CLIFramework\Command
         $logger->info("Hostname => $localHostname");
 
 
+
         /* save xml document */
         $xmlContent = $dom->saveXML();
 
 
+        /**
+         * Mirror REST-ful part
+         * @see http://pear.php.net/manual/en/core.rest.php
+         */
 
 
+
+        /**
+         * Show suggested Apache configuration for this 
+         */
     }
 
 }
