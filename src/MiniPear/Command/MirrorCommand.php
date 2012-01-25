@@ -67,14 +67,20 @@ class MirrorCommand extends \CLIFramework\Command
             // $logger->info("Alias => $alias");
 
             /**
-            * alter the channel host to {{alias}}.dev 
-            *
-            *     alias pear => host pear-local.dev
-            */
+             * alter the channel host to {{alias}}.dev 
+             *
+             *     alias pear => host pear-local.dev
+             */
             $node = $dom->getElementsByTagName('name')->item(0);
             $localHostname = $alias;
             $node->removeChild($node->firstChild);
             $node->appendChild(new \DOMText( $localHostname ));
+
+
+            /**
+             * XXX: replace rest url with local alias and local host
+             *
+             */
 
             // $logger->info("Hostname => $localHostname");
 
