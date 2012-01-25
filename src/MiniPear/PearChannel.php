@@ -77,6 +77,7 @@ class PearChannel
         $restNode = $primaryServerNode->getElementsByTagName('rest')->item(0)->firstChild;
         $this->channelRestBaseUrl = rtrim($restNode->nodeValue,'/');  # this should be read from channel.xml
 
+
         /* rest schema urls */
         $this->packagesXmlUrl = $this->channelRestBaseUrl . '/p/packages.xml';
         $this->categoriesXmlUrl = $this->channelRestBaseUrl . '/c/categories.xml';
@@ -106,6 +107,7 @@ class PearChannel
         }
         return $xml;
     }
+
 
 }
 

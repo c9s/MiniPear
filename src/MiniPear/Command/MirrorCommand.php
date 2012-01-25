@@ -16,8 +16,11 @@ class MirrorCommand extends \CLIFramework\Command
 
     function execute($host)
     {
+
         $logger = $this->getLogger();
         $logger->info( "Starting mirror $host..." );
+
+        Utils::$logger = $logger;
 
         /* read minipear config */
         $config = \MiniPear\Config::getInstance();
@@ -79,8 +82,15 @@ class MirrorCommand extends \CLIFramework\Command
 
             /**
              * XXX: replace rest url with local alias and local host
-             *
              */
+            $nodes = $dom->getElementsByTagName('primary')->item(0)->getElementsByTagName('baseurl');
+            foreach( $nodes as $n ) {
+                $url = $n->nodeValue;
+                $info = parse_url( $url );
+                $url = $info['scheme'] . '://' . $localHostname . $info['path'];
+                $n->removeChild($n->firstChild);
+                $n->appendChild(new \DOMText( $url ));
+            }
 
             // $logger->info("Hostname => $localHostname");
 
@@ -98,21 +108,96 @@ class MirrorCommand extends \CLIFramework\Command
          */
 
         /** get packages */
-        $xml = $pearChannel->fetchPackagesXml();
+        Utils::mirror_file( $pearChannel->packagesXmlUrl , $root );
 
-        /** store packagesXml into channel rest root */
-        Utils::mkpath( $root . DIRECTORY_SEPARATOR . 'rest' . DIRECTORY_SEPARATOR . 'p' );
 
-        file_put_contents( 
-            $root. DIRECTORY_SEPARATOR . 'rest' . DIRECTORY_SEPARATOR . 'p' . DIRECTORY_SEPARATOR . 'packages.xml',
-            $dom->saveXML());
+        $logger->info('Getting package list...');
+        $packageList = array();
+        $packagesXml = $pearChannel->fetchPackagesXml();
+        foreach( $packagesXml->getElementsByTagName('p') as $p ) {
+            $packageList[] = $p->nodeValue;
+        }
 
-        
+
+        /**
+         * download package for /rest/p
+         *
+         *    info.xml
+         *    maintainers.xml
+         *    maintainers2.xml
+         *
+         */
+        $logger->info('Mirroring package info section...');
+        foreach( $packageList as $packageName ) {
+            $urls = array();
+            $urls[] = $pearChannel->channelRestBaseUrl . '/p/' . strtolower($packageName) . '/info.xml';
+            $urls[] = $pearChannel->channelRestBaseUrl . '/p/' . strtolower($packageName) . '/maintainers.xml';
+            $urls[] = $pearChannel->channelRestBaseUrl . '/p/' . strtolower($packageName) . '/maintainers2.xml';
+            foreach( $urls as $url ) {
+                Utils::mirror_file( $url , $root );
+            }
+        }
+
+        /** 
+         * download packages for /rest/r
+         * release info:
+         *
+         *  - allrelease.xml
+         *  - allrelease2.xml
+         *  - latest.txt
+         *  - stable.txt
+         *  - beta.txt
+         *  - alpha.txt
+         *  - devel.txt
+         *
+         *  - {version}.xml
+         *  - v2.{version}.xml
+         *  - package.{version}.xml
+         *  - deps.{version}.txt
+         */
+        $logger->info('Mirroring package info section...');
+        foreach( $packageList as $packageName ) {
+            $base = $pearChannel->channelRestBaseUrl . '/r/' . strtolower($packageName); // . '/info.xml';
+
+            $stabilities = array();
+            $versions = array();
+
+            // parse allreleases.xml for package versions
+            $xml = $pearChannel->requestXml( $base . '/allreleases2.xml' );
+            $nodes = $xml->getElementsByTagName('r');
+            foreach( $nodes as $n ) {
+                $version = $n->getElementsByTagName('v')->item(0)->nodeValue;
+                $stability = $n->getElementsByTagName('s')->item(0)->nodeValue;
+                $phpVersion = $n->getElementsByTagName('m')->item(0)->nodeValue; // minimal php version
+                $versions[] = $version;
+                $stabilities[ $stability ] = 1;
+            }
+
+
+            $files = array();
+            $files[] = 'allreleases.xml';
+            $files[] = 'allreleases2.xml';
+
+            $files[] = 'latest.txt';
+            foreach( array_keys($stabilities) as $s ) {
+                $files[] = $s . '.txt';
+            }
+
+            foreach( $versions as $version ) {
+                $files[] = $version . '.txt';
+                $files[] = 'v2.' . $version . '.xml';
+                $files[] = 'package.' . $version . '.xml';
+                $files[] = 'deps.' . $version . '.txt';
+            }
+
+            foreach( $files as $file ) {
+                Utils::mirror_file(  $base . '/' . $file , $root );
+            }
+        }
 
         /**
          * Print suggested Apache configuration for this 
          */
-
 
 
         $logger->info('Done');
