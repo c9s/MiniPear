@@ -3,8 +3,15 @@ namespace MiniPear;
 
 class Config
 {
+
     public $miniPearHome;
+
+
+    /**
+     * directory stores channels 
+     */
     public $miniPearChannelDir;
+
     public $config;
 
     function __construct()
@@ -26,9 +33,16 @@ class Config
         if( file_exists($configFile) ) {
             $this->config = parse_ini_file( $configFile, true );
         }
-
     }
 
+
+    /**
+     * get channel root path
+     *
+     * @param string $host
+     *
+     * @return string channel root path
+     */
     public function getChannelRoot($host)
     {
         $localChannelRoot = $this->miniPearChannelDir . DIRECTORY_SEPARATOR . $host;
