@@ -89,7 +89,6 @@ class CurlDownloader
 
     public function fetchXml($url)
     {
-        // $this->logger->info( "Fetching $url ..." );
         $xmlContent = $this->fetch( $url );
 
         if( strpos($xmlContent,'<?xml') === false )

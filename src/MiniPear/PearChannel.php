@@ -87,7 +87,7 @@ class PearChannel
         $this->alias = $node->firstChild->nodeValue;
 
         /* save host name */
-        $this->name = $xml->getElementsByTagName('name')->item(0);
+        $this->name = $xml->getElementsByTagName('name')->item(0)->nodeValue;
 
 
     }

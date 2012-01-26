@@ -142,8 +142,15 @@ class MirrorCommand extends \CLIFramework\Command
          */
 
         /** get packages */
-        Utils::mirror_file( $pearChannel->packagesXmlUrl , $root );
-        Utils::mirror_file( $pearChannel->categoriesXmlUrl , $root ); //  mirror /rest/c/categories.xml
+        $localFile = Utils::mirror_file( $pearChannel->packagesXmlUrl , $root );
+        $sxml = simplexml_load_file( $localFile );
+        $sxml->c = $localChannel;
+        $sxml->asXML( $localFile );
+
+        $localFile = Utils::mirror_file( $pearChannel->categoriesXmlUrl , $root ); //  mirror /rest/c/categories.xml
+        $sxml = simplexml_load_file( $localFile );
+        $sxml->ch = $localChannel;
+        $sxml->asXML( $localFile );
 
 
         /** xxx: mirror categories **/
@@ -173,8 +180,12 @@ class MirrorCommand extends \CLIFramework\Command
             $urls[] = $pearChannel->channelRestBaseUrl . '/p/' . strtolower($packageName) . '/maintainers.xml';
             $urls[] = $pearChannel->channelRestBaseUrl . '/p/' . strtolower($packageName) . '/maintainers2.xml';
             foreach( $urls as $url ) {
-                Utils::mirror_file( $url , $root );
+                $localFile = Utils::mirror_file( $url , $root );
+                $sxml = simplexml_load_file( $localFile );
+                $sxml->c = $localChannel;
+                $sxml->asXML( $localFile );
             }
+
         }
 
 
@@ -230,27 +241,49 @@ class MirrorCommand extends \CLIFramework\Command
                 $stabilities[ $stability ] = 1;
             }
 
-
             $files = array();
-            $files[] = 'allreleases.xml';
-            $files[] = 'allreleases2.xml';
-
             $files[] = 'latest.txt';
             foreach( array_keys($stabilities) as $s ) {
                 $files[] = $s . '.txt';
             }
 
-            foreach( $versions as $version ) {
-                $files[] = $version . '.txt';
-                $files[] = $version . '.xml';
-                $files[] = 'v2.' . $version . '.xml';
-                $files[] = 'package.' . $version . '.xml';
-                $files[] = 'deps.' . $version . '.txt';
-            }
-
             foreach( $files as $file ) {
                 Utils::mirror_file(  $base . '/' . $file , $root );
             }
+
+            foreach( $versions as $version ) {
+                Utils::mirror_file( $base . '/deps.' . $version . '.txt', $root );
+
+                $localFile = Utils::mirror_file( $base . '/' . $version . '.xml' , $root );
+                $sxml = simplexml_load_file( $localFile );
+                $sxml->c = $localChannel;
+                $sxml->g = str_replace( $pearChannel->name, $localChannel , (string) $sxml->g );
+                $sxml->asXML( $localFile );
+
+
+                $localFile = Utils::mirror_file( $base . '/v2.' . $version . '.xml', $root );
+                $sxml = simplexml_load_file( $localFile );
+                $sxml->c = $localChannel;
+                $sxml->g = str_replace( $pearChannel->name, $localChannel , (string) $sxml->g );
+                $sxml->asXML( $localFile );
+
+
+                $localFile = Utils::mirror_file( $base . '/package.' . $version . '.xml' , $root );
+                $sxml = simplexml_load_file( $localFile );
+                $sxml->channel = $localChannel;
+                $sxml->asXML( $localFile );
+
+                $localFile = Utils::mirror_file( $base . '/allreleases.xml', $root);
+                $sxml = simplexml_load_file( $localFile );
+                $sxml->c = $localChannel;
+                $sxml->asXML( $localFile );
+
+                $localFile = Utils::mirror_file( $base . '/allreleases2.xml', $root);
+                $sxml = simplexml_load_file( $localFile );
+                $sxml->c = $localChannel;
+                $sxml->asXML( $localFile );
+            }
+
 
             // save Package version
             $packageVersions[ $packageName ] = $versions;
@@ -274,7 +307,7 @@ class MirrorCommand extends \CLIFramework\Command
 
             foreach( $urls as $url ) {
                 if( ($file = Utils::mirror_file( $url, $root ) ) !== false ) {
-                    $logger->info("Updating package channel to $localChannel");
+                    $logger->debug2("Update package channel to $localChannel",1);
                     UpdatePackage::setChannel( $file , $localChannel );
                 }
             }
@@ -303,8 +336,7 @@ Run pear to discover your mirror:
     $ pear discover-channel $localChannel
 
 EOS;
-        $logger->info($help);
-
+        echo $help;
     }
 
 }

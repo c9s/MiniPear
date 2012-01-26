@@ -4,6 +4,7 @@ use Phar;
 use DOMDocument;
 use DOMText;
 use Exception;
+use PharData;
 
 
 /**
@@ -17,40 +18,31 @@ class UpdatePackage
     static function setChannel($packageFile,$channel)
     {
 
-        $pharName = $packageFile . '.phar';
-
-        rename( $packageFile , $pharName );
-
-        /* try to read package file */
+        /*
+         * xxx: phar doesn't support tgz format.
+         */
         try {
-            // load package.xml
-            $xml = file_get_contents( $p['package.xml'] );
+        $p = new PharData($packageFile, 0,'phartest.phar'); 
 
+        # $pharName = str_replace('.tgz','.phar',$packageFile);
+        # rename( $packageFile , $pharName );
+        # $pharUri = 'phar://' . $pharName . '/package.xml';
 
-            // patch package.xml
-            $dom = new DOMDocument('1.0');
-            $dom->loadXml( $xml );
+        // load package.xml
+        $xml = file_get_contents( $p['package.xml'] );
+        $xml = \MiniPear\Utils::change_package_xml_channel( $xml , $channel );
 
-            // get channel tag
-            $channelNode = $dom->getElementsByTagName('channel')->item(0);
-
-            // original channel
-            $origChannel = $channelNode->nodeValue;
-
-            $channelNode->removeChild( $channelNode->firstChild );
-            $channelNode->appendChild( new DOMText($channel) );
-            $xml = $dom->saveXml();
-
-            // save package.xml
-            $p['package.xml'] = $xml;
-            
-        } catch (Exception $e) {
-             echo 'Could not modify file.txt:', $e->getMessage();
-        }
+        // save package.xml
+        $p['package.xml'] = $xml;
+        // file_put_contents( $pharUri , $xml );
 
         /* rename it back */
-        rename( $pharName , $packageFile );
+        // rename( $pharName , $packageFile );
+        } catch( Exception $e ) {
+            die( $e->getMessage() );
+        }
     }
+
 }
 
 
