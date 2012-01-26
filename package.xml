@@ -1,0 +1,79 @@
+<?xml version="1.0"?>
+<package xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" packagerversion="1.4.10" version="2.0" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0        http://pear.php.net/dtd/tasks-1.0.xsd        http://pear.php.net/dtd/package-2.0        http://pear.php.net/dtd/package-2.0.xsd">
+  <name>MiniPear</name>
+  <channel>pear.corneltek.com</channel>
+  <summary>PEAR channel mirror tool</summary>
+  <description>PEAR channel mirror tool</description>
+  <lead>
+    <name>Yo-An Lin</name>
+    <user/>
+    <email>cornelius.howl@gmail.com</email>
+    <active>yes</active>
+  </lead>
+  <date>2012-01-27</date>
+  <time>01:50:38</time>
+  <version>
+    <release>0.0.1</release>
+    <api>0.0.1</api>
+  </version>
+  <stability>
+    <release>alpha</release>
+    <api>alpha</api>
+  </stability>
+  <license>PHP</license>
+  <notes>-</notes>
+  <contents>
+    <dir name="/">
+      <file name="doc/Plan.md" role="doc" md5sum="81037d0537d5695e07e4a4fa9efe607b"/>
+      <file name="doc/issues.md" role="doc" md5sum="c399e956e6a9c65f5e6e0d9997471d33"/>
+      <file name="doc/pear/channel.xml" role="doc" md5sum="bba3c76dc40240dcae23af5da851ec71"/>
+      <file name="doc/pear/us_channel.xml" role="doc" md5sum="bba3c76dc40240dcae23af5da851ec71"/>
+      <file name="doc/pear_channel.xml" role="doc" md5sum="f823f99fecac7c2fac80192170fbaef1"/>
+      <file name="tests/MiniPear/UtilsTest.php" role="test" md5sum="15f3fbaeefb73ce1bac6fd3d6b6339dc"/>
+      <file name="tests/bootstrap.php" role="test" md5sum="57dbaf1ee585e3a07f4ba993aec499ba"/>
+      <file name="src/MiniPear/ChannelListStore.php" role="php" md5sum="de56701fa6315375e401721f585fc82b"/>
+      <file name="src/MiniPear/Command/MirrorCommand.php" role="php" md5sum="d98cdeb24c79677444e8efae19a19dd6"/>
+      <file name="src/MiniPear/Config.php" role="php" md5sum="7785e6482ca323e04c673d004f9e3b12"/>
+      <file name="src/MiniPear/Console.php" role="php" md5sum="20a5d80acedfa32cfc5aefbde5d87955"/>
+      <file name="src/MiniPear/CurlDownloader.php" role="php" md5sum="f9e760235537b417c1c2733bee5f5a22"/>
+      <file name="src/MiniPear/PearChannel.php" role="php" md5sum="99616b54fc8f82ebc1b3d8c116d0c6f1"/>
+      <file name="src/MiniPear/Progress/UpdatePackage.php" role="php" md5sum="92e522d518b621504f4c8f7a9f774542"/>
+      <file name="src/MiniPear/Utils.php" role="php" md5sum="68e47846f95fba7e60a8ef0ee3cfc221"/>
+      <file name="minipear" role="script" md5sum="1234184938711568100ea804edf59dd9"/>
+    </dir>
+  </contents>
+  <dependencies>
+    <required>
+      <php>
+        <min>5.3</min>
+      </php>
+      <pearinstaller>
+        <min>1.4</min>
+      </pearinstaller>
+      <package>
+        <name>CLIFramework</name>
+        <channel>pear.corneltek.com</channel>
+      </package>
+    </required>
+  </dependencies>
+  <phprelease>
+    <filelist>
+      <install name="doc/Plan.md" as="Plan.md"/>
+      <install name="doc/issues.md" as="issues.md"/>
+      <install name="doc/pear/channel.xml" as="pear/channel.xml"/>
+      <install name="doc/pear/us_channel.xml" as="pear/us_channel.xml"/>
+      <install name="doc/pear_channel.xml" as="pear_channel.xml"/>
+      <install name="tests/MiniPear/UtilsTest.php" as="MiniPear/UtilsTest.php"/>
+      <install name="tests/bootstrap.php" as="bootstrap.php"/>
+      <install name="src/MiniPear/ChannelListStore.php" as="MiniPear/ChannelListStore.php"/>
+      <install name="src/MiniPear/Command/MirrorCommand.php" as="MiniPear/Command/MirrorCommand.php"/>
+      <install name="src/MiniPear/Config.php" as="MiniPear/Config.php"/>
+      <install name="src/MiniPear/Console.php" as="MiniPear/Console.php"/>
+      <install name="src/MiniPear/CurlDownloader.php" as="MiniPear/CurlDownloader.php"/>
+      <install name="src/MiniPear/PearChannel.php" as="MiniPear/PearChannel.php"/>
+      <install name="src/MiniPear/Progress/UpdatePackage.php" as="MiniPear/Progress/UpdatePackage.php"/>
+      <install name="src/MiniPear/Utils.php" as="MiniPear/Utils.php"/>
+      <install name="minipear" as="minipear"/>
+    </filelist>
+  </phprelease>
+</package>
