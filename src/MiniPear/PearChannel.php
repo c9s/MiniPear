@@ -70,8 +70,11 @@ class PearChannel
         }
 
         /* get rest base url */
-        $restNode = $primaryServerNode->getElementsByTagName('rest')->item(0)->firstChild;
+        $restNode = $primaryServerNode
+                    ->getElementsByTagName('rest')->item(0)
+                    ->getElementsByTagName('baseurl')->item(0); // ->firstChild;
         $this->channelRestBaseUrl = rtrim($restNode->nodeValue,'/');  # this should be read from channel.xml
+        
 
 
         /* rest schema urls */

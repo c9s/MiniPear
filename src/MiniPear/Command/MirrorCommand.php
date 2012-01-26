@@ -96,14 +96,22 @@ class MirrorCommand extends \CLIFramework\Command
 
             // $logger->info("Hostname => $localHostname");
 
+
+
             /* save xml document */
             $xmlContent = $dom->saveXML();
 
             // xxx: because of the stupid PEAR uses a stupid pcre pattern to 
             // validate channel version, we have to fix this by hands.
-            $xmlContent = str_replace(' version="1.0" ',' ', $xmlContent );
-            $xmlContent = str_replace('<channel ','<channel version="1.0" ', $xmlContent );
-            
+            // $xmlContent = str_replace('<channel ','<channel version="1.0" ', $xmlContent );
+            $declare = '<channel version="1.0" 
+                xmlns="http://pear.php.net/channel-1.0" 
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+                xsi:schemaLocation="http://pear.php.net/channel-1.0 
+                http://pear.php.net/dtd/channel-1.0.xsd">';
+            $xmlContent = preg_replace( '/<channel [^>]+>/' , $declare , $xmlContent );
+
+
             $channelXmlPath = $root . DIRECTORY_SEPARATOR . 'channel.xml';
             $logger->debug('Saving ' . $channelXmlPath );
             file_put_contents( $channelXmlPath, $xmlContent );
@@ -117,8 +125,13 @@ class MirrorCommand extends \CLIFramework\Command
 
         /** get packages */
         Utils::mirror_file( $pearChannel->packagesXmlUrl , $root );
+        Utils::mirror_file( $pearChannel->categoriesXmlUrl , $root ); //  mirror /rest/c/categories.xml
 
 
+        /** xxx: mirror categories **/
+
+
+        /** get package list **/
         $logger->info('Getting package list...');
         $packageList = array();
         $packagesXml = $pearChannel->fetchPackagesXml();
@@ -211,6 +224,7 @@ class MirrorCommand extends \CLIFramework\Command
 
             foreach( $versions as $version ) {
                 $files[] = $version . '.txt';
+                $files[] = $version . '.xml';
                 $files[] = 'v2.' . $version . '.xml';
                 $files[] = 'package.' . $version . '.xml';
                 $files[] = 'deps.' . $version . '.txt';

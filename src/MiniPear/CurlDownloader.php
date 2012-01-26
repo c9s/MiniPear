@@ -23,9 +23,9 @@ class CurlProgressStar
     public function progress($downloadSize, $downloaded, $uploadSize, $uploaded)
     {
         /* 4kb */
-        if( $downloadSize < 8000 ) 
+        if( $downloadSize < 8000 ) {
             return;
-
+        }
         if( $this->done ) {
             return;
         }
@@ -34,15 +34,16 @@ class CurlProgressStar
 
         if( $downloadSize != 0 && $downloadSize === $downloaded ) {
             $this->done = true;
-            printf("\r\t%-60s                           \n",$this->url);
+            printf("\r\t%-60s                         \n",$this->url);
         } else {
             $percent = ($downloaded > 0 ? (float) ($downloaded / $downloadSize) : 0.0 );
             if( ++$this->i > 3 )
                 $this->i = 0;
-            $s = $this->stars[ $this->i ];
 
-            /* 8 + 1 + 60 + 1 + 1 + 1 + 5 = */
-            printf("\r\tFetching %-60s %s % .1f%% %s", $this->url, $s, $percent * 100, Utils::pretty_size($downloaded) );
+            /* 8 + 1 + 60 + 1 + 1 + 1 + 6 = */
+            printf("\r\tFetching %-60s %s % 3.1f%% %s", $this->url,
+                $this->stars[ $this->i ], 
+                $percent * 100, Utils::pretty_size($downloaded) );
         }
     }
 }
@@ -93,8 +94,10 @@ class CurlDownloader
 
         /* load xml with DOMDocument */
         $dom = new \DOMDocument('1.0');
-        $dom->preserveWhiteSpace = false;
+        
+        $dom->preserveWhiteSpace = true;
         $dom->formatOutput = true;
+
         if( @$dom->loadXML($xmlContent) === false )
             throw new Exception( 'XML error: ' . $url  ); 
         return $dom;
@@ -133,9 +136,9 @@ class CurlDownloader
          */
 
         if( ! $result = curl_exec($ch))
-            throw new Exception( $url . ":" . curl_error($ch) );
+            throw new Exception( 'Curl Error: ' . $url . " - " . curl_error($ch) );
         if( curl_getinfo($ch, CURLINFO_HTTP_CODE) === 400 )
-            throw new Exception( "404 Not Found." );
+            throw new Exception( "Curl Error: 404 Not Found." );
 
         curl_close($ch); 
         return $result;
