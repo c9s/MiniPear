@@ -42,8 +42,8 @@ class Utils
         $d->progress = $progress;
 
         $content = $d->fetch( $url );
-        if( ! $content ) {
-            self::$logger->error( $url . ' failed.' );
+        if( $content == false ) {
+            // self::$logger->warn( $url . ' failed.' );
             return false;
         }
 

@@ -250,7 +250,7 @@ class MirrorCommand extends \CLIFramework\Command
             foreach( $nodes as $n ) {
                 $version = $n->getElementsByTagName('v')->item(0)->nodeValue;
                 $stability = $n->getElementsByTagName('s')->item(0)->nodeValue;
-                $phpVersion = $n->getElementsByTagName('m')->item(0)->nodeValue; // minimal php version
+                // $phpVersion = $n->getElementsByTagName('m')->item(0)->nodeValue; // minimal php version
                 $versions[] = $version;
                 $stabilities[ $stability ] = 1;
             }

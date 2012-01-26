@@ -140,10 +140,15 @@ class CurlDownloader
             return false;
          */
 
-        if( ! $result = curl_exec($ch))
-            throw new Exception( 'Curl Error: ' . $url . " - " . curl_error($ch) );
-        if( curl_getinfo($ch, CURLINFO_HTTP_CODE) === 400 )
-            throw new Exception( "Curl Error: 404 Not Found." );
+        if( ! $result = curl_exec($ch)) {
+            // throw new Exception( 'Curl Error: ' . $url . " - " . curl_error($ch) );
+            return false;
+        }
+
+        if( curl_getinfo($ch, CURLINFO_HTTP_CODE) === 400 ) {
+            // throw new Exception( "Curl Error: 404 Not Found." );
+            return false;
+        }
 
         curl_close($ch); 
         return $result;
