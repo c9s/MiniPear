@@ -13,8 +13,10 @@ use Exception;
 class UpdatePackage
 {
 
+
     static function setChannel($packageFile,$channel)
     {
+
         $pharName = $packageFile . '.phar';
 
         rename( $packageFile , $pharName );

@@ -4,6 +4,7 @@ namespace MiniPear\Command;
 use DOMDocument;
 use MiniPear\CurlDownloader;
 use MiniPear\Utils;
+use MiniPear\Progress\UpdatePackage;
 use Exception;
 
 
@@ -243,6 +244,7 @@ class MirrorCommand extends \CLIFramework\Command
          * foreach package with different verions, 
          * download them all.
          */
+        $logger->info("Downloading package files...");
         foreach( $packageVersions as $packageName => $versions ) {
             $base = $pearChannel->channelBaseUrl . '/get/';
             $formats = array('tar','tgz');
@@ -254,7 +256,8 @@ class MirrorCommand extends \CLIFramework\Command
             }
 
             foreach( $urls as $url ) {
-                Utils::mirror_file( $url, $root );
+                $file = Utils::mirror_file( $url, $root );
+                UpdatePackage::setChannel( $file , $localHostname );
             }
         }
 

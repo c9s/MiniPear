@@ -33,7 +33,7 @@ class Utils
         self::mkpath( $localPath );
         $localFilePath = $localPath . DIRECTORY_SEPARATOR . $filename;
         if( file_exists($localFilePath) )
-            return;
+            return $localFilePath;
 
         $d = new CurlDownloader;
         $progress = new CurlProgressStar;
@@ -46,7 +46,7 @@ class Utils
         }
 
         if( file_put_contents( $localFilePath , $content ) !== false )
-            return true;
+            return $localFilePath;
 
         self::$logger->error( "File write failed: $localFilePath" );
         return false;
