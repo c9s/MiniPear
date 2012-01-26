@@ -20,10 +20,13 @@ class CurlProgressStar
     public $url;
     public $done = false;
 
+    /* minimum size to render this progress bar */
+    public $showSize = 10240;
+
     public function progress($downloadSize, $downloaded, $uploadSize, $uploaded)
     {
         /* 4kb */
-        if( $downloadSize < 8000 ) {
+        if( $downloadSize < $this->showSize ) {
             return;
         }
         if( $this->done ) {
@@ -125,7 +128,7 @@ class CurlDownloader
             $this->progress->url = $url;
             curl_setopt($ch, CURLOPT_NOPROGRESS, false);
             curl_setopt($ch, CURLOPT_PROGRESSFUNCTION, array($this->progress,'progress') );
-            curl_setopt($ch, CURLOPT_BUFFERSIZE, 64 );
+            curl_setopt($ch, CURLOPT_BUFFERSIZE, 128 );
         }
 
         /*
