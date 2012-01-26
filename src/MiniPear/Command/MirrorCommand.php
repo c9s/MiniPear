@@ -54,6 +54,20 @@ class MirrorCommand extends \CLIFramework\Command
          */
         $pearChannel->loadChannelXml();
 
+        $localAlias = $pearChannel->alias;
+        if( $options->alias ) {
+            $localAlias = $options->alias->value;
+        } else {
+            $localAlias = $localAlias . '-local';
+        }
+
+        // use alias as local hostname by default.
+        if( $options->channel ) {
+            $localChannel = $options->channel->value;
+        } else {
+            $localChannel = $localAlias;
+        }
+
         /**
          alter the channel alias with suffix -local 
 
@@ -69,50 +83,36 @@ class MirrorCommand extends \CLIFramework\Command
          
          */
         {
-            $alias = $pearChannel->alias;
-
-            if( $options->alias ) {
-                $alias = $options->alias->value;
-            } else {
-                $alias = $alias . '-local';
-            }
-
-            // use alias as local hostname by default.
-            if( $options->channel ) {
-                $localHostname = $options->channel->value;
-            } else {
-                $localHostname = $alias;
-            }
 
             $dom = $pearChannel->channelXml;
             $node = $dom->getElementsByTagName('suggestedalias')->item(0);
             $node->removeChild($node->firstChild);
-            $node->appendChild(new \DOMText( $alias ));
-            // $logger->info("Alias => $alias");
+            $node->appendChild(new \DOMText( $localAlias ));
+            // $logger->info("Alias => $localAlias");
 
             /**
-             * alter the channel host to {{alias}}.dev 
+             * alter the channel host to {{localAlias}}.dev 
              *
              *     alias pear => host pear-local.dev
              */
             $node = $dom->getElementsByTagName('name')->item(0);
             $node->removeChild($node->firstChild);
-            $node->appendChild(new \DOMText( $localHostname ));
+            $node->appendChild(new \DOMText( $localChannel ));
 
 
             /**
-             * XXX: replace rest url with local alias and local host
+             * replace rest url with local alias and local host
              */
             $nodes = $dom->getElementsByTagName('primary')->item(0)->getElementsByTagName('baseurl');
             foreach( $nodes as $n ) {
                 $url = $n->nodeValue;
                 $info = parse_url( $url );
-                $url = $info['scheme'] . '://' . $localHostname . $info['path'];
+                $url = $info['scheme'] . '://' . $localChannel . $info['path'];
                 $n->removeChild($n->firstChild);
                 $n->appendChild(new \DOMText( $url ));
             }
 
-            // $logger->info("Hostname => $localHostname");
+            // $logger->info("Hostname => $localChannel");
 
 
 
@@ -274,21 +274,37 @@ class MirrorCommand extends \CLIFramework\Command
 
             foreach( $urls as $url ) {
                 if( ($file = Utils::mirror_file( $url, $root ) ) !== false ) {
-                    $logger->info("Updating package channel to $localHostname");
-                    UpdatePackage::setChannel( $file , $localHostname );
+                    $logger->info("Updating package channel to $localChannel");
+                    UpdatePackage::setChannel( $file , $localChannel );
                 }
             }
         }
 
 
+        $logger->info('Done');
 
         /**
          * Print suggested Apache configuration for this 
          */
+        $help =<<<EOS
+You can now add the config below to setup the local pear channel server:
 
+    <VirtualHost *:80>
+        ServerName $localChannel
+        DocumentRoot "$root"
+    </VirtualHost>
 
+And append this line to your /etc/hosts file:
 
-        $logger->info('Done');
+    127.0.0.1 $localChannel
+
+Run pear to discover your mirror:
+
+    $ pear discover-channel $localChannel
+
+EOS;
+        $logger->info($help);
+
     }
 
 }
