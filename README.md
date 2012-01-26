@@ -6,6 +6,10 @@ To create a mirror:
 
     $ minipear mirror {channel host}
 
+Print verbose / debug messages:
+
+    $ minipear -d mirror {channel host}
+
 Channel sites will be mirrored into ~/.minipear/pear/channels.
 
 The channel host will be replaced by `{alias}-local`, you can install packages
