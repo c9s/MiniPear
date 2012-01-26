@@ -8,7 +8,6 @@ use MiniPear\Progress\UpdatePackage;
 use Exception;
 
 
-
 class MirrorCommand extends \CLIFramework\Command
 {
 
@@ -17,9 +16,16 @@ class MirrorCommand extends \CLIFramework\Command
         return 'mirror a PEAR channel.';
     }
 
-    function execute($host)
-    {
 
+    public function options($opts)
+    {
+        $opts->add('c|channel','local channel hostname');
+        $opts->add('a|alias',  'local channel alias');
+    }
+
+    public function execute($host)
+    {
+        $options = $this->getOptions();
         $logger = $this->getLogger();
         $logger->info( "Starting mirror $host..." );
 
@@ -64,7 +70,19 @@ class MirrorCommand extends \CLIFramework\Command
          */
         {
             $alias = $pearChannel->alias;
-            $alias = $alias . '-local';
+
+            if( $options->alias ) {
+                $alias = $options->alias->value;
+            } else {
+                $alias = $alias . '-local';
+            }
+
+            // use alias as local hostname by default.
+            if( $options->channel ) {
+                $localHostname = $options->channel->value;
+            } else {
+                $localHostname = $alias;
+            }
 
             $dom = $pearChannel->channelXml;
             $node = $dom->getElementsByTagName('suggestedalias')->item(0);
@@ -78,7 +96,6 @@ class MirrorCommand extends \CLIFramework\Command
              *     alias pear => host pear-local.dev
              */
             $node = $dom->getElementsByTagName('name')->item(0);
-            $localHostname = $alias;
             $node->removeChild($node->firstChild);
             $node->appendChild(new \DOMText( $localHostname ));
 
@@ -256,8 +273,10 @@ class MirrorCommand extends \CLIFramework\Command
             }
 
             foreach( $urls as $url ) {
-                $file = Utils::mirror_file( $url, $root );
-                UpdatePackage::setChannel( $file , $localHostname );
+                if( ($file = Utils::mirror_file( $url, $root ) ) !== false ) {
+                    $logger->info("Updating package channel to $localHostname");
+                    UpdatePackage::setChannel( $file , $localHostname );
+                }
             }
         }
 
@@ -266,6 +285,7 @@ class MirrorCommand extends \CLIFramework\Command
         /**
          * Print suggested Apache configuration for this 
          */
+
 
 
         $logger->info('Done');
