@@ -11,7 +11,7 @@
     <active>yes</active>
   </lead>
   <date>2012-01-27</date>
-  <time>01:50:38</time>
+  <time>02:07:51</time>
   <version>
     <release>0.0.1</release>
     <api>0.0.1</api>
@@ -39,7 +39,7 @@
       <file name="src/MiniPear/PearChannel.php" role="php" md5sum="99616b54fc8f82ebc1b3d8c116d0c6f1"/>
       <file name="src/MiniPear/Progress/UpdatePackage.php" role="php" md5sum="92e522d518b621504f4c8f7a9f774542"/>
       <file name="src/MiniPear/Utils.php" role="php" md5sum="68e47846f95fba7e60a8ef0ee3cfc221"/>
-      <file name="minipear" role="script" md5sum="1234184938711568100ea804edf59dd9"/>
+      <file name="minipear" role="script" md5sum="04c2ce52c34e9f9b7f4c35ee5f4d1083"/>
     </dir>
   </contents>
   <dependencies>
