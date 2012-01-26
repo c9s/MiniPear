@@ -1,0 +1,3 @@
+<?php
+$app = new \MiniPear\Console;
+$app->run( $argv );

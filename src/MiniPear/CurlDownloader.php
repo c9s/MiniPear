@@ -90,9 +90,11 @@ class CurlDownloader
     public function fetchXml($url)
     {
         $xmlContent = $this->fetch( $url );
+        if( $xmlContent == false )
+            return false;
 
         if( strpos($xmlContent,'<?xml') === false )
-            throw new Exception( "$url is not an XML format content." );
+            return false;
 
         /* load xml with DOMDocument */
         $dom = new \DOMDocument('1.0');
@@ -102,6 +104,7 @@ class CurlDownloader
 
         if( @$dom->loadXML($xmlContent) === false )
             throw new Exception( 'XML error: ' . $url  ); 
+
         return $dom;
     }
 
@@ -111,7 +114,7 @@ class CurlDownloader
         $defaults = array( 
             CURLOPT_HEADER => 0, 
             CURLOPT_URL => $url, 
-            CURLOPT_FRESH_CONNECT => 1, 
+            // CURLOPT_FRESH_CONNECT => 1,
             CURLOPT_RETURNTRANSFER => 1, 
             CURLOPT_FORBID_REUSE => 1, 
             CURLOPT_TIMEOUT => $this->timeout, 

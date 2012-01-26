@@ -55,36 +55,14 @@ class Utils
     }
 
 
-    static function change_xmlfile_channel($file,$tagName,$channel)
+    static function load_xml_file($file)
     {
-        $xml = new DOMDocument('1.0');
-        $xml->loadXml( file_get_contents($file) );
+        $sxml = @simplexml_load_file( $file );
+        if( $sxml )
+            return $sxml;
 
-        // get channel tag
-        $channelNode = $xml->getElementsByTagName($tagName)->item(0);
-
-        // original channel
-        $origChannel = $channelNode->nodeValue;
-        $channelNode->removeChild( $channelNode->firstChild );
-        $channelNode->appendChild( new DOMText($channel) );
-        file_put_contents( $file, $xml->saveXml() );
-    }
-
-    static function change_package_xml_channel($xml,$channel)
-    {
-        // patch package.xml
-        $dom = new DOMDocument('1.0');
-        $dom->loadXml( $xml );
-
-        // get channel tag
-        $channelNode = $dom->getElementsByTagName('channel')->item(0);
-
-        // original channel
-        $origChannel = $channelNode->nodeValue;
-
-        $channelNode->removeChild( $channelNode->firstChild );
-        $channelNode->appendChild( new DOMText($channel) );
-        return $dom->saveXml();
+        self::$logger->error("xml file load failed.");
+        return false;
     }
 
 }

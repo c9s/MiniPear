@@ -30,7 +30,11 @@ class UpdatePackage
 
         // load package.xml
         $xml = file_get_contents( $p['package.xml'] );
-        $xml = \MiniPear\Utils::change_package_xml_channel( $xml , $channel );
+        $sxml = new \SimpleXmlElement( $xml );
+        $sxml->channel = $channel;
+        $xml = $sxml->asXML();
+
+        // $xml = \MiniPear\Utils::change_package_xml_channel( $xml , $channel );
 
         // save package.xml
         $p['package.xml'] = $xml;
