@@ -258,7 +258,10 @@ class MirrorCommand extends \CLIFramework\Command
             $files = array();
 
             $stabilityVersions = array();
-            Utils::mirror_file(  $base . '/latest.txt' , $root );
+
+            $localFile = Utils::mirror_file(  $base . '/latest.txt' , $root );
+            $stabilityVersions['latest'] = file_get_contents( $localFile );
+
             foreach( array_keys($stabilities) as $s ) {
                 $localFile = Utils::mirror_file(  $base . '/' . $s . '.txt' , $root );
                 $stabilityVersions[ $s ] = file_get_contents( $localFile );
