@@ -256,14 +256,16 @@ class MirrorCommand extends \CLIFramework\Command
             }
 
             $files = array();
-            $files[] = 'latest.txt';
+
+            $stabilityVersions = array();
+            Utils::mirror_file(  $base . '/latest.txt' , $root );
             foreach( array_keys($stabilities) as $s ) {
-                $files[] = $s . '.txt';
+                $localFile = Utils::mirror_file(  $base . '/' . $s . '.txt' , $root );
+                $stabilityVersions[ $s ] = file_get_contents( $localFile );
             }
 
-            foreach( $files as $file ) {
-                Utils::mirror_file(  $base . '/' . $file , $root );
-            }
+            // xxx: do not mirror all version 
+            $versions = array_values( $stabilityVersions );
 
             foreach( $versions as $version ) {
                 Utils::mirror_file( $base . '/deps.' . $version . '.txt', $root );
