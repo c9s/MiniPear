@@ -2,6 +2,15 @@ MiniPear - PEAR Channel Local Mirror Tool
 =========================================
 MiniPear can create local pear channel mirrors for offline usage.
 
+<a target="_blank" href="https://github.com/c9s/MiniPear/raw/master/static/01.png">
+<img src="https://github.com/c9s/MiniPear/raw/master/static/01.png" width="300"/>
+</a>
+<a target="_blank" href="https://github.com/c9s/MiniPear/raw/master/static/02.png">
+<img src="https://github.com/c9s/MiniPear/raw/master/static/02.png" width="300"/>
+</a>
+
+## Usage
+
 To create a mirror:
 
     $ minipear mirror {channel host}
