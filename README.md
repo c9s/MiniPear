@@ -5,6 +5,7 @@ MiniPear can create local pear channel mirrors for offline usage.
 <a target="_blank" href="https://github.com/c9s/MiniPear/raw/master/static/01.png">
 <img src="https://github.com/c9s/MiniPear/raw/master/static/01.png" width="300"/>
 </a>
+<br/>
 <a target="_blank" href="https://github.com/c9s/MiniPear/raw/master/static/02.png">
 <img src="https://github.com/c9s/MiniPear/raw/master/static/02.png" width="300"/>
 </a>
