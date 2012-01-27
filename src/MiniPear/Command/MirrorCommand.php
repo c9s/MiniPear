@@ -361,7 +361,7 @@ And append this line to your /etc/hosts file:
 
 Run pear to discover your mirror:
 
-    $ pear discover-channel $localChannel
+    $ pear channel-discover $localChannel
 
 EOS;
         echo $help;
