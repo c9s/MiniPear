@@ -114,7 +114,8 @@ class CurlDownloader
         $defaults = array( 
             CURLOPT_HEADER => 0, 
             CURLOPT_URL => $url, 
-            // CURLOPT_FRESH_CONNECT => 1,
+            CURLOPT_FOLLOWLOCATION => 1,
+            CURLOPT_FRESH_CONNECT => 1,
             CURLOPT_RETURNTRANSFER => 1, 
             CURLOPT_FORBID_REUSE => 1, 
             CURLOPT_TIMEOUT => $this->timeout, 
