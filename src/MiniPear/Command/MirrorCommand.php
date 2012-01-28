@@ -257,7 +257,9 @@ class MirrorCommand extends \CLIFramework\Command
                 $stability = $n->getElementsByTagName('s')->item(0)->nodeValue;
                 // $phpVersion = $n->getElementsByTagName('m')->item(0)->nodeValue; // minimal php version
                 $versions[] = $version;
-                $stabilities[ $stability ] = 1;
+                if( in_array( $stability, array('alpha','beta','stable') ) )  {
+                    $stabilities[ $stability ] = 1;
+                }
             }
 
             $files = array();
