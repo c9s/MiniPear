@@ -13,6 +13,8 @@ class PearChannel
     public $alias;
     public $name;
 
+    public $channelRestType;
+
     /* url list */
     public $channelXmlUrl;
     public $channelBaseUrl;
@@ -73,10 +75,17 @@ class PearChannel
 
         /* get rest base url */
         $restNode = $primaryServerNode
-                    ->getElementsByTagName('rest')->item(0)
-                    ->getElementsByTagName('baseurl')->item(0); // ->firstChild;
-        $this->channelRestBaseUrl = rtrim($restNode->nodeValue,'/');  # this should be read from channel.xml
-        
+                    ->getElementsByTagName('rest')->item(0);
+        $baseUrlList = $restNode->getElementsByTagName('baseurl'); // get lastChild
+
+        $baseUrl = $baseUrlList->item( $baseUrlList->length - 1 );
+        $restType = $baseUrl->getAttribute('type');
+
+        $this->channelRestBaseUrl = rtrim($baseUrl->nodeValue,'/');  # this should be read from channel.xml
+        $this->channelRestType = $restType;
+
+
+        $this->logger->info("REST type: $restType");
 
 
         /* rest schema urls */
@@ -101,6 +110,8 @@ class PearChannel
     public function fetchPackagesXml()
     {
         $xml = $this->packagesXml = $this->requestXml($this->packagesXmlUrl);
+        if( ! $xml )
+            die( $this->packagesXmlUrl . ' not found.');
 
         // $packagesXml->getElementsByTagName('c')->item(0);
         foreach( $this->packagesXml->getElementsByTagName('p') as $p ) {

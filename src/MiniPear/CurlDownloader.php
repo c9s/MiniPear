@@ -90,7 +90,7 @@ class CurlDownloader
     public function fetchXml($url)
     {
         $xmlContent = $this->fetch( $url );
-        if( $xmlContent == false )
+        if( ! $xmlContent )
             return false;
 
         if( strpos($xmlContent,'<?xml') === false )
@@ -103,7 +103,7 @@ class CurlDownloader
         $dom->formatOutput = true;
 
         if( @$dom->loadXML($xmlContent) === false )
-            throw new Exception( 'XML error: ' . $url  ); 
+            return false;
 
         return $dom;
     }
