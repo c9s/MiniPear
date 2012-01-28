@@ -57,6 +57,8 @@ class PearChannel
         // $this->channelBaseUrl;
         // $this->channelXmlUrl;
         $xml = $this->fetchChannelXml();
+        if( ! $xml )
+            die("channel.xml load failed.");
 
         $serversNode = $xml->getElementsByTagName('servers')->item(0);
         $primaryServerNode = $serversNode->getElementsByTagName('primary')->item(0);
