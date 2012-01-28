@@ -11,7 +11,7 @@
     <active>yes</active>
   </lead>
   <date>2012-01-28</date>
-  <time>14:56:08</time>
+  <time>19:19:44</time>
   <version>
     <release>0.0.2</release>
     <api>0.0.2</api>
@@ -27,16 +27,17 @@
       <file name="doc/pear_channel.xml" role="doc" md5sum="f823f99fecac7c2fac80192170fbaef1"/>
       <file name="doc/Plan.md" role="doc" md5sum="81037d0537d5695e07e4a4fa9efe607b"/>
       <file name="tests/bootstrap.php" role="test" md5sum="57dbaf1ee585e3a07f4ba993aec499ba"/>
+      <file name="tests/MiniPear/CurlDownloaderTest.php" role="test" md5sum="acb2af368f127e1e07c93ce6a92580c0"/>
       <file name="tests/MiniPear/UtilsTest.php" role="test" md5sum="9ddb1c2d61a8459ee4b20bb7fc472cbe"/>
       <file name="src/MiniPear/ChannelListStore.php" role="php" md5sum="de56701fa6315375e401721f585fc82b"/>
-      <file name="src/MiniPear/Command/MirrorCommand.php" role="php" md5sum="a16e57f88f09742c3567fa82a383c850"/>
+      <file name="src/MiniPear/Command/MirrorCommand.php" role="php" md5sum="16a2bd6ea965976c910ce8a53c0cfd0a"/>
       <file name="src/MiniPear/Config.php" role="php" md5sum="7785e6482ca323e04c673d004f9e3b12"/>
-      <file name="src/MiniPear/Console.php" role="php" md5sum="20a5d80acedfa32cfc5aefbde5d87955"/>
-      <file name="src/MiniPear/CurlDownloader.php" role="php" md5sum="9e749b952eb66ae63f34f2f92a11231e"/>
+      <file name="src/MiniPear/Console.php" role="php" md5sum="cf785a78d86be1ac7c6f0efecb1ffe87"/>
+      <file name="src/MiniPear/CurlDownloader.php" role="php" md5sum="cdff694b4eec94fd2d294628dab3cdd1"/>
       <file name="src/MiniPear/PearChannel.php" role="php" md5sum="a6b2ebfcffa98827b7bf6738f37e19f2"/>
       <file name="src/MiniPear/Progress/UpdatePackage.php" role="php" md5sum="92e522d518b621504f4c8f7a9f774542"/>
       <file name="src/MiniPear/Utils.php" role="php" md5sum="68e47846f95fba7e60a8ef0ee3cfc221"/>
-      <file name="minipear" role="script" md5sum="a7d388ed8c9473c059139866c70813a3"/>
+      <file name="minipear" role="script" md5sum="1a10932ba900e946340926518bc490fe"/>
     </dir>
   </contents>
   <dependencies>
@@ -58,6 +59,7 @@
       <install name="doc/pear_channel.xml" as="pear_channel.xml"/>
       <install name="doc/Plan.md" as="Plan.md"/>
       <install name="tests/bootstrap.php" as="bootstrap.php"/>
+      <install name="tests/MiniPear/CurlDownloaderTest.php" as="MiniPear/CurlDownloaderTest.php"/>
       <install name="tests/MiniPear/UtilsTest.php" as="MiniPear/UtilsTest.php"/>
       <install name="src/MiniPear/ChannelListStore.php" as="MiniPear/ChannelListStore.php"/>
       <install name="src/MiniPear/Command/MirrorCommand.php" as="MiniPear/Command/MirrorCommand.php"/>
