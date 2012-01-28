@@ -246,6 +246,10 @@ class MirrorCommand extends \CLIFramework\Command
                     $xml = $pearChannel->requestXml( $base . '/allreleases.xml' );
                 }
 
+                if( ! $xml ) {
+                    throw new Exception("$base/allreleases.xml fetch failed.");
+                }
+
             } catch( Exception $e ) {
                 $logger->error( $e->getMessage() );
                 continue;
