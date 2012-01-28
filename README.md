@@ -10,6 +10,11 @@ MiniPear can create local pear channel mirrors for offline usage.
 <img src="https://github.com/c9s/MiniPear/raw/master/static/02.png" width="300"/>
 </a>
 
+## Install through Pear channel
+
+    $ sudo pear channel-discover pear.corneltek.com
+    $ sudo pear install corneltek/MiniPear
+
 ## Usage
 
 To create a mirror:
@@ -29,6 +34,7 @@ For example:
 
     $ sudo pear channel-discover pear-local
     $ sudo pear install pear-local/Archive_Tar
+
 
 ## Author 
 

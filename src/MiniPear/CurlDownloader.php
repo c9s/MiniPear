@@ -141,7 +141,7 @@ class CurlDownloader
             return false;
          */
 
-        if( ! $result = curl_exec($ch)) {
+        if( ! ($result = curl_exec($ch)) ) {
             // throw new Exception( 'Curl Error: ' . $url . " - " . curl_error($ch) );
             return false;
         }
