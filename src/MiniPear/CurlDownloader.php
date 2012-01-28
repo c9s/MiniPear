@@ -37,14 +37,14 @@ class CurlProgressStar
 
         if( $downloadSize != 0 && $downloadSize === $downloaded ) {
             $this->done = true;
-            printf("\r\t%-60s                         \n",$this->url);
+            printf("\r\t%-60s                           \n",$this->url);
         } else {
             $percent = ($downloaded > 0 ? (float) ($downloaded / $downloadSize) : 0.0 );
             if( ++$this->i > 3 )
                 $this->i = 0;
 
             /* 8 + 1 + 60 + 1 + 1 + 1 + 6 = */
-            printf("\r\tFetching %-60s %s % 3.1f%% %s", $this->url,
+            printf("\r\tFetching %-60s %s % -3.1f%% %s", $this->url,
                 $this->stars[ $this->i ], 
                 $percent * 100, Utils::pretty_size($downloaded) );
         }
@@ -146,7 +146,7 @@ class CurlDownloader
             return false;
         }
 
-        if( curl_getinfo($ch, CURLINFO_HTTP_CODE) === 400 ) {
+        if( curl_getinfo($ch, CURLINFO_HTTP_CODE) === 404 ) {
             // throw new Exception( "Curl Error: 404 Not Found." );
             return false;
         }
