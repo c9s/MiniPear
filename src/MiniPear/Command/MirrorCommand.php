@@ -19,8 +19,8 @@ class MirrorCommand extends \CLIFramework\Command
 
     public function options($opts)
     {
-        $opts->add('c|channel','local channel hostname');
-        $opts->add('a|alias',  'local channel alias');
+        $opts->add('c|channel?','local channel hostname');
+        $opts->add('a|alias?',  'local channel alias');
     }
 
     public function execute($host)
