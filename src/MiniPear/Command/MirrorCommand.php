@@ -185,7 +185,7 @@ class MirrorCommand extends \CLIFramework\Command
             $urls[] = $pearChannel->channelRestBaseUrl . '/p/' . strtolower($packageName) . '/info.xml';
             $urls[] = $pearChannel->channelRestBaseUrl . '/p/' . strtolower($packageName) . '/maintainers.xml';
 
-            if( version_compare($pearChannel->restType,'1.2') >= 0 ) {
+            if( version_compare($pearChannel->restType,'REST1.2') >= 0 ) {
                 $urls[] = $pearChannel->channelRestBaseUrl . '/p/' . strtolower($packageName) . '/maintainers2.xml';
             }
 
@@ -239,7 +239,7 @@ class MirrorCommand extends \CLIFramework\Command
             try {
                 // parse allreleases.xml for package versions
 
-                if( version_compare($pearChannel->restType,'1.3') >= 0 ) {
+                if( version_compare($pearChannel->restType,'REST1.3') >= 0 ) {
                     $xml = $pearChannel->requestXml( $base . '/allreleases2.xml' );
                 }
                 else {
@@ -306,7 +306,7 @@ class MirrorCommand extends \CLIFramework\Command
                     }
                 }
 
-                if( version_compare($pearChannel->restType,'1.3') >= 0 ) {
+                if( version_compare($pearChannel->restType,'REST1.3') >= 0 ) {
 
                     if( $localFile = Utils::mirror_file( $base . '/allreleases2.xml', $root) ) {
                         if( $sxml = Utils::load_xml_file( $localFile ) ) {
