@@ -184,7 +184,11 @@ class MirrorCommand extends \CLIFramework\Command
             $urls = array();
             $urls[] = $pearChannel->channelRestBaseUrl . '/p/' . strtolower($packageName) . '/info.xml';
             $urls[] = $pearChannel->channelRestBaseUrl . '/p/' . strtolower($packageName) . '/maintainers.xml';
-            $urls[] = $pearChannel->channelRestBaseUrl . '/p/' . strtolower($packageName) . '/maintainers2.xml';
+
+            if( version_compare($pearChannel->restType,'1.2') >= 0 ) {
+                $urls[] = $pearChannel->channelRestBaseUrl . '/p/' . strtolower($packageName) . '/maintainers2.xml';
+            }
+
             foreach( $urls as $url ) {
                 if( $localFile = Utils::mirror_file( $url , $root ) ) {
                     if( $sxml = Utils::load_xml_file( $localFile ) ) {
@@ -234,13 +238,14 @@ class MirrorCommand extends \CLIFramework\Command
 
             try {
                 // parse allreleases.xml for package versions
-                $xml = $pearChannel->requestXml( $base . '/allreleases2.xml' );
-                if( $xml ) {
 
+                if( version_compare($pearChannel->restType,'1.3') >= 0 ) {
+                    $xml = $pearChannel->requestXml( $base . '/allreleases2.xml' );
                 }
                 else {
                     $xml = $pearChannel->requestXml( $base . '/allreleases.xml' );
                 }
+
             } catch( Exception $e ) {
                 $logger->error( $e->getMessage() );
                 continue;
@@ -283,13 +288,6 @@ class MirrorCommand extends \CLIFramework\Command
                     }
                 }
 
-                if( $localFile = Utils::mirror_file( $base . '/v2.' . $version . '.xml', $root ) ) {
-                    if( $sxml = Utils::load_xml_file( $localFile ) ) {
-                        $sxml->c = $localChannel;
-                        $sxml->g = str_replace( $pearChannel->name, $localChannel , (string) $sxml->g );
-                        $sxml->asXML( $localFile );
-                    }
-                }
 
 
                 if( $localFile = Utils::mirror_file( $base . '/package.' . $version . '.xml' , $root ) ) {
@@ -306,12 +304,25 @@ class MirrorCommand extends \CLIFramework\Command
                     }
                 }
 
-                if( $localFile = Utils::mirror_file( $base . '/allreleases2.xml', $root) ) {
-                    if( $sxml = Utils::load_xml_file( $localFile ) ) {
-                        $sxml->c = $localChannel;
-                        $sxml->asXML( $localFile );
+                if( version_compare($pearChannel->restType,'1.3') >= 0 ) {
+
+                    if( $localFile = Utils::mirror_file( $base . '/allreleases2.xml', $root) ) {
+                        if( $sxml = Utils::load_xml_file( $localFile ) ) {
+                            $sxml->c = $localChannel;
+                            $sxml->asXML( $localFile );
+                        }
                     }
+
+                    if( $localFile = Utils::mirror_file( $base . '/v2.' . $version . '.xml', $root ) ) {
+                        if( $sxml = Utils::load_xml_file( $localFile ) ) {
+                            $sxml->c = $localChannel;
+                            $sxml->g = str_replace( $pearChannel->name, $localChannel , (string) $sxml->g );
+                            $sxml->asXML( $localFile );
+                        }
+                    }
+
                 }
+
             }
 
 

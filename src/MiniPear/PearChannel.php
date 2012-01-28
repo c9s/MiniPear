@@ -13,7 +13,7 @@ class PearChannel
     public $alias;
     public $name;
 
-    public $channelRestType;
+    public $restType;
 
     /* url list */
     public $channelXmlUrl;
@@ -82,7 +82,7 @@ class PearChannel
         $restType = $baseUrl->getAttribute('type');
 
         $this->channelRestBaseUrl = rtrim($baseUrl->nodeValue,'/');  # this should be read from channel.xml
-        $this->channelRestType = $restType;
+        $this->restType = $restType;
 
 
         $this->logger->info("REST type: $restType");
