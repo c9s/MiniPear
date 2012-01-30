@@ -16,11 +16,11 @@ class MirrorCommand extends \CLIFramework\Command
         return 'mirror a PEAR channel.';
     }
 
-
     public function options($opts)
     {
         $opts->add('c|channel?','local channel hostname');
         $opts->add('a|alias?',  'local channel alias');
+        $opts->add('all','mirror all packages');
     }
 
     public function execute($host)
@@ -281,7 +281,9 @@ class MirrorCommand extends \CLIFramework\Command
             }
 
             // xxx: do not mirror all version 
-            $versions = array_values( $stabilityVersions );
+            if( ! $options->all ) {
+                $versions = array_values( $stabilityVersions );
+            }
 
             foreach( $versions as $version ) {
                 Utils::mirror_file( $base . '/deps.' . $version . '.txt', $root );
