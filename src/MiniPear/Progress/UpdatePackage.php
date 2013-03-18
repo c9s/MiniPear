@@ -29,7 +29,11 @@ class UpdatePackage
         # $pharUri = 'phar://' . $pharName . '/package.xml';
 
         // load package.xml
-        $xml = file_get_contents( $p['package.xml'] );
+        if (isset($p['package2.xml'])) {
+            $xml = file_get_contents( $p['package2.xml'] );
+        } else {
+            $xml = file_get_contents( $p['package.xml'] );
+        }
         $sxml = new \SimpleXmlElement( $xml );
         $sxml->channel = $channel;
         $xml = $sxml->asXML();
@@ -37,7 +41,11 @@ class UpdatePackage
         // $xml = \MiniPear\Utils::change_package_xml_channel( $xml , $channel );
 
         // save package.xml
-        $p['package.xml'] = $xml;
+        if (isset($p['package2.xml'])) {
+            $p['package2.xml'] = $xml;
+        } else {
+            $p['package.xml'] = $xml;
+        }
         // file_put_contents( $pharUri , $xml );
 
         /* rename it back */

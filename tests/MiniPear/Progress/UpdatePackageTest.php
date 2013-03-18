@@ -28,4 +28,13 @@ class MiniPear_Progress_UpdatePackageTest extends PHPUnit_Framework_TestCase
         $tar = new \Archive_Tar($this->packagePath);
         $this->assertContains($channel, $tar->extractInString('package.xml'));
     }
+
+    public function testSetChannelChangeTheChannelInPackage2Xml()
+    {
+        $this->preparePackage('package2.tgz');
+        $channel = 'new.channel.net';
+        UpdatePackage::setChannel($this->packagePath, $channel);
+        $tar = new \Archive_Tar($this->packagePath);
+        $this->assertContains($channel, $tar->extractInString('package2.xml'));
+    }
 }
