@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<package xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" packagerversion="1.4.10" version="2.0" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0        http://pear.php.net/dtd/tasks-1.0.xsd        http://pear.php.net/dtd/package-2.0        http://pear.php.net/dtd/package-2.0.xsd">
+<package xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" packagerversion="1.4.10" version="2.0" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0               http://pear.php.net/dtd/tasks-1.0.xsd               http://pear.php.net/dtd/package-2.0               http://pear.php.net/dtd/package-2.0.xsd">
   <name>MiniPear</name>
   <channel>pear.corneltek.com</channel>
   <summary>PEAR channel mirror tool</summary>
@@ -10,8 +10,8 @@
     <email>cornelius.howl@gmail.com</email>
     <active>yes</active>
   </lead>
-  <date>2012-01-31</date>
-  <time>03:54:28</time>
+  <date>2013-12-07</date>
+  <time>03:20:08</time>
   <version>
     <release>0.0.2</release>
     <api>0.0.2</api>
@@ -24,20 +24,14 @@
   <notes>-</notes>
   <contents>
     <dir name="/">
-      <file name="doc/pear_channel.xml" role="doc" md5sum="f823f99fecac7c2fac80192170fbaef1"/>
-      <file name="doc/Plan.md" role="doc" md5sum="81037d0537d5695e07e4a4fa9efe607b"/>
-      <file name="tests/bootstrap.php" role="test" md5sum="57dbaf1ee585e3a07f4ba993aec499ba"/>
-      <file name="tests/MiniPear/CurlDownloaderTest.php" role="test" md5sum="2a01e3cdde7dcf5ecbf3084294ff6104"/>
-      <file name="tests/MiniPear/UtilsTest.php" role="test" md5sum="5cd4447fd15c895c9de266b31a93f8aa"/>
       <file name="src/MiniPear/ChannelListStore.php" role="php" md5sum="de56701fa6315375e401721f585fc82b"/>
       <file name="src/MiniPear/Command/MirrorCommand.php" role="php" md5sum="26e4e384170dbfd814ac3ce4e0df6bbb"/>
       <file name="src/MiniPear/Config.php" role="php" md5sum="7785e6482ca323e04c673d004f9e3b12"/>
       <file name="src/MiniPear/Console.php" role="php" md5sum="cf785a78d86be1ac7c6f0efecb1ffe87"/>
       <file name="src/MiniPear/CurlDownloader.php" role="php" md5sum="314d6285c8014063c4ea7d67d1222540"/>
       <file name="src/MiniPear/PearChannel.php" role="php" md5sum="a6b2ebfcffa98827b7bf6738f37e19f2"/>
-      <file name="src/MiniPear/Progress/UpdatePackage.php" role="php" md5sum="92e522d518b621504f4c8f7a9f774542"/>
+      <file name="src/MiniPear/Progress/UpdatePackage.php" role="php" md5sum="f43ba8029d1280797ec3d4c68c5235d0"/>
       <file name="src/MiniPear/Utils.php" role="php" md5sum="68e47846f95fba7e60a8ef0ee3cfc221"/>
-      <file name="minipear" role="script" md5sum="3e532d7338836427f1162e99939e7981"/>
     </dir>
   </contents>
   <dependencies>
@@ -56,11 +50,6 @@
   </dependencies>
   <phprelease>
     <filelist>
-      <install name="doc/pear_channel.xml" as="pear_channel.xml"/>
-      <install name="doc/Plan.md" as="Plan.md"/>
-      <install name="tests/bootstrap.php" as="bootstrap.php"/>
-      <install name="tests/MiniPear/CurlDownloaderTest.php" as="MiniPear/CurlDownloaderTest.php"/>
-      <install name="tests/MiniPear/UtilsTest.php" as="MiniPear/UtilsTest.php"/>
       <install name="src/MiniPear/ChannelListStore.php" as="MiniPear/ChannelListStore.php"/>
       <install name="src/MiniPear/Command/MirrorCommand.php" as="MiniPear/Command/MirrorCommand.php"/>
       <install name="src/MiniPear/Config.php" as="MiniPear/Config.php"/>
@@ -69,7 +58,6 @@
       <install name="src/MiniPear/PearChannel.php" as="MiniPear/PearChannel.php"/>
       <install name="src/MiniPear/Progress/UpdatePackage.php" as="MiniPear/Progress/UpdatePackage.php"/>
       <install name="src/MiniPear/Utils.php" as="MiniPear/Utils.php"/>
-      <install name="minipear" as="minipear"/>
     </filelist>
   </phprelease>
 </package>
