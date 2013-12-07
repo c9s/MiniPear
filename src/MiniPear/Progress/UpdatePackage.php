@@ -5,6 +5,7 @@ use DOMDocument;
 use DOMText;
 use Exception;
 use PharData;
+use SimpleXmlElement;
 
 
 /**
@@ -13,6 +14,35 @@ use PharData;
  */
 class UpdatePackage
 {
+
+    static function patchPackageXmlPackageDep($packageNode, $fromChannel, $toChannel) {
+        if ($packageNode->getName() == "package" ) {
+            if ( ((string)$packageNode->channel) == $fromChannel ) {
+                $packageNode->channel = $toChannel;
+            }
+        }
+    }
+
+    static function patchPackageXml($xmlContent, $toChannel) 
+    {
+        $sxml = new SimpleXmlElement( $xmlContent );
+        $fromChannel = (string) $sxml->channel;
+        $sxml->channel = $toChannel;
+
+        if ( $deps = $sxml->dependencies ) {
+            if ( $required = $deps->required ) {
+                foreach ( $required->children() as $child ) {
+                    self::patchPackageXmlPackageDep($child, $fromChannel, $toChannel);
+                }
+            }
+            if ( $optional = $deps->optional ) {
+                foreach ( $optional->children() as $child ) {
+                    self::patchPackageXmlPackageDep($child, $fromChannel, $toChannel);
+                }
+            }
+        }
+        return $sxml->asXML();
+    }
 
 
     static function setChannel($packageFile,$channel)
@@ -34,9 +64,8 @@ class UpdatePackage
         } else {
             $xml = file_get_contents( $p['package.xml'] );
         }
-        $sxml = new \SimpleXmlElement( $xml );
-        $sxml->channel = $channel;
-        $xml = $sxml->asXML();
+
+        $xml = self::patchPackageXml( $xml, $channel );
 
         // $xml = \MiniPear\Utils::change_package_xml_channel( $xml , $channel );
 

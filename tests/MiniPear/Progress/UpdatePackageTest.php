@@ -17,7 +17,9 @@ class MiniPear_Progress_UpdatePackageTest extends PHPUnit_Framework_TestCase
 
     protected function tearDown()
     {
-        unlink($this->packagePath);
+        if ( file_exists($this->packagePath) ) {
+            unlink($this->packagePath);
+        }
     }
 
     public function testSetChannelChangeTheChannelInPackageXml()
@@ -27,6 +29,13 @@ class MiniPear_Progress_UpdatePackageTest extends PHPUnit_Framework_TestCase
         UpdatePackage::setChannel($this->packagePath, $channel);
         $tar = new \Archive_Tar($this->packagePath);
         $this->assertContains($channel, $tar->extractInString('package.xml'));
+    }
+
+    public function testPackageXmlRewrite()
+    {
+        $file = __DIR__ . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'package.xml';
+        $xml = UpdatePackage::patchPackageXml( file_get_contents($file) , 'pear-local' );
+        echo $xml;
     }
 
     public function testSetChannelChangeTheChannelInPackage2Xml()
