@@ -1,0 +1,364 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" packagerversion="1.9.4" version="2.0" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0     http://pear.php.net/dtd/tasks-1.0.xsd     http://pear.php.net/dtd/package-2.0     http://pear.php.net/dtd/package-2.0.xsd">
+ <name>Text_CAPTCHA</name>
+ <channel>pear.php.net</channel>
+ <summary>Generation of CAPTCHAs</summary>
+ <description>
+
+Implementation of CAPTCHAs (completely
+automated public Turing test to tell computers
+and humans apart)
+ </description>
+ <lead>
+  <name>Christian Wenz</name>
+  <user>wenz</user>
+  <email>wenz@php.net</email>
+  <active/>
+ </lead>
+ <lead>
+  <name>Michael Cramer</name>
+  <user>bigmichi1</user>
+  <email>michael@bigmichi1.de</email>
+  <active>yes</active>
+ </lead>
+ <contributor>
+  <name>Christian Weiske</name>
+  <user/>
+  <email>cweiske@php.net</email>
+  <active/>
+ </contributor>
+ <contributor>
+  <name>Aaron Wormus</name>
+  <user/>
+  <email>wormus@php.net</email>
+  <active/>
+ </contributor>
+ <contributor>
+  <name>David Coallier</name>
+  <user/>
+  <email>davidc@agoraproduction.com</email>
+  <active/>
+ </contributor>
+ <contributor>
+  <name>Tobias Schlitt</name>
+  <user/>
+  <email>schlitt@php.net</email>
+  <active/>
+ </contributor>
+ <date>2013-08-07</date>
+ <time>13:59:43</time>
+ <version>
+  <release>0.5.0</release>
+  <api>0.5.0</api>
+ </version>
+ <stability>
+  <release>beta</release>
+  <api>beta</api>
+ </stability>
+ <license uri="http://www.opensource.org/licenses/bsd-license.php">New BSD</license>
+ <notes>
+First PHP5 release
+
+* use phing to build package
+* extend test cases
+* Bug #19858 Figlet: _createPhrase duplicates
+parent method
+* Bug #19891 undefined function init()
+* Request #19854 No reason for Figlet
+double-options:
+$options['options']['font_file']
+* dependency for Image_Text to version 0.7.0
+ </notes>
+ <contents>
+  <dir baseinstalldir="/" name="/">
+   <file baseinstalldir="/" md5sum="eef52bc5a00eae12b82264de53a17032" name="examples/SimpleExample.php" role="doc"/>
+   <file baseinstalldir="/" md5sum="a1c78757d4aa6fe5ff1e69e5df252614" name="tests/Text_CAPTCHA_Driver_Equation_Test.php" role="test"/>
+   <file baseinstalldir="/" md5sum="2b5c2c768212c646856efda8ad778440" name="tests/Text_CAPTCHA_Driver_Figlet_Test.php" role="test"/>
+   <file baseinstalldir="/" md5sum="ee80e344068e093669f70a35e670acd8" name="tests/Text_CAPTCHA_Driver_Image_Test.php" role="test"/>
+   <file baseinstalldir="/" md5sum="5fabafd54bd2fedb269a4a0181ba31e2" name="tests/Text_CAPTCHA_Driver_Numeral_Test.php" role="test"/>
+   <file baseinstalldir="/" md5sum="8d02b879674c86b4384534844b222c36" name="tests/Text_CAPTCHA_Driver_Word_Test.php" role="test"/>
+   <file baseinstalldir="/" md5sum="5ff5543ca912578856b2ae71cf78adbf" name="tests/Text_CAPTCHA_Test.php" role="test"/>
+   <file baseinstalldir="/" md5sum="72c75860d89e91a517dfb1e7d308c180" name="tests/data/cour.ttf" role="test"/>
+   <file baseinstalldir="/" md5sum="3f8b3a916a94da904179ab1b3ac2c31c" name="tests/data/makisupa.flf" role="test"/>
+   <file baseinstalldir="/" md5sum="0e59abdbbff64d621a288ef40b06b821" name="Text/CAPTCHA.php" role="php"/>
+   <file baseinstalldir="/" md5sum="d5c72180f43917741663c2c2db56c9bb" name="Text/CAPTCHA/Driver.php" role="php"/>
+   <file baseinstalldir="/" md5sum="4028ccc9b3833a039409463ded56705c" name="Text/CAPTCHA/Exception.php" role="php"/>
+   <file baseinstalldir="/" md5sum="64ed9e9a120db296e2e9951d50734ddf" name="Text/CAPTCHA/Driver/Base.php" role="php"/>
+   <file baseinstalldir="/" md5sum="42f305fab4c8b68af6634acacd073cbe" name="Text/CAPTCHA/Driver/Equation.php" role="php"/>
+   <file baseinstalldir="/" md5sum="e317f68d8003cd723860d15a084a80fd" name="Text/CAPTCHA/Driver/Figlet.php" role="php"/>
+   <file baseinstalldir="/" md5sum="dd2fb1b868140bce87af2b56be82bf91" name="Text/CAPTCHA/Driver/Image.php" role="php"/>
+   <file baseinstalldir="/" md5sum="27f77ba58c805d0aeafd91d263e122ff" name="Text/CAPTCHA/Driver/Numeral.php" role="php"/>
+   <file baseinstalldir="/" md5sum="e0a81b4de617ba585cc2676b52dcfa1b" name="Text/CAPTCHA/Driver/Word.php" role="php"/>
+   <file baseinstalldir="/" md5sum="d1eac0cb4966bb892c4beba97abb4067" name="LICENSE" role="doc"/>
+   <file baseinstalldir="/" md5sum="87eced5689e270d15e661421b44e2b9f" name="README" role="doc"/>
+  </dir>
+ </contents>
+ <dependencies>
+  <required>
+   <php>
+    <min>5.1.0</min>
+   </php>
+   <pearinstaller>
+    <min>1.4.6</min>
+   </pearinstaller>
+   <package>
+    <name>Text_Password</name>
+    <channel>pear.php.net</channel>
+    <min>1.1.1</min>
+   </package>
+  </required>
+  <optional>
+   <package>
+    <name>Numbers_Words</name>
+    <channel>pear.php.net</channel>
+   </package>
+   <package>
+    <name>Text_Figlet</name>
+    <channel>pear.php.net</channel>
+   </package>
+   <package>
+    <name>Image_Text</name>
+    <channel>pear.php.net</channel>
+    <min>0.7.0</min>
+   </package>
+   <extension>
+    <name>gd</name>
+   </extension>
+  </optional>
+ </dependencies>
+ <phprelease/>
+ <changelog>
+  <release>
+   <version>
+    <release>0.5.0</release>
+    <api>0.5.0</api>
+   </version>
+   <stability>
+    <release>beta</release>
+    <api>beta</api>
+   </stability>
+   <date>2013-08-07</date>
+   <license uri="http://www.opensource.org/licenses/bsd-license.php">New BSD</license>
+   <notes>
+First PHP5 release
+
+* use phing to build package
+* extend test cases
+* Bug #19858 Figlet: _createPhrase duplicates
+parent method
+* Bug #19891 undefined function init()
+* Request #19854 No reason for Figlet
+double-options:
+$options['options']['font_file']
+* dependency for Image_Text to version 0.7.0
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>0.4.1</release>
+    <api>0.4.0</api>
+   </version>
+   <stability>alpha</stability>
+   <date>2010-10-25</date>
+   <license>New BSD</license>
+   <notes>
+QA release
+
+* Request #11653 Text_Password::create() call
+* Bug #12578 incorrect/incomplete license in
+package.xml
+* Request #16433 Image Driver: If image is too
+small, no text is created
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>0.4.0</release>
+    <api>0.4.0</api>
+   </version>
+   <stability>alpha</stability>
+   <date>2009-07-27</date>
+   <license>New BSD</license>
+   <notes>
++ ** license change from PHP license to BSD
+license **
++ implemented feature request #16433 (fixing
+behavior from bug #13478): If image is too
+small, no text is created (patch by tacker)
++ implemented feature request #11653: new
+'phraseOptions' setting to provide options to
+Text_Password::create() call
++ updated and new examples
++ various cosmetic changes
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>0.3.1</release>
+    <api>0.3.0</api>
+   </version>
+   <stability>alpha</stability>
+   <date>2007-09-02</date>
+   <license>PHP License</license>
+   <notes>
++ implemented feature request #11957: Providing
+better Image driver error messages in various
+places
++ fixed example/documentation bug #11960
++ various cosmetic changes
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>0.3.0</release>
+    <api>0.3.0</api>
+   </version>
+   <stability>alpha</stability>
+   <date>2007-08-01</date>
+   <license>PHP License</license>
+   <notes>
++ new feature: now supports setting background
+and line color for image CAPTCHAs (see
+CAPTCHA_test.php example file). Requires
+Image_Text &gt;= 0.6.0beta to work. Many thanks
+to isnull!
++ bugfix: CAPTCHA drivers now also load
+Text/CAPTCHA.php via require_once (suggested
+by Philippe Jausions)
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>0.2.1</release>
+    <api>0.2.1</api>
+   </version>
+   <stability>alpha</stability>
+   <date>2007-02-18</date>
+   <license>PHP License</license>
+   <notes>
++ bugfix: image height could not be set
+(reported by Hendrik Vorwerk)
++ cosmetic changes
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>0.2.0</release>
+    <api>0.2.0</api>
+   </version>
+   <stability>alpha</stability>
+   <date>2006-12-24</date>
+   <license>PHP License</license>
+   <notes>
+***********************************
+********* MERRY CHRISTMAS *********
+***********************************
+***********************************
+*** Upcoming BC BREAKING CHANGES **
+***********************************
++ CAPTCHA options are now provided as one array
+(wormus' suggestion)
++ image CAPTCHA is now only created upon
+request, making it serializable (jausions'
+suggestion)
++ New drivers: Figlet (wormus), Word (toby),
+Numeral (davidc), Equation (cweiske)
++ some other stuff ...
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>0.1.6</release>
+    <api>0.1.6</api>
+   </version>
+   <stability>alpha</stability>
+   <date>2005-10-27</date>
+   <license>PHP License</license>
+   <notes>
++ fixed a bug in the sample (noticed by Nima
+Sadjadi)
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>0.1.5</release>
+    <api>0.1.5</api>
+   </version>
+   <stability>alpha</stability>
+   <date>2005-09-26</date>
+   <license>PHP License</license>
+   <notes>
++ cosmetic changes (CS)
++ small changes sample script (suggested by
+Lukas Smith, thanks!)
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>0.1.4</release>
+    <api>0.1.4</api>
+   </version>
+   <stability>alpha</stability>
+   <date>2005-08-11</date>
+   <license>PHP License</license>
+   <notes>
++ cosmetic changes (whitespace, line endings)
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>0.1.3</release>
+    <api>0.1.3</api>
+   </version>
+   <stability>alpha</stability>
+   <date>2005-06-19</date>
+   <license>PHP License</license>
+   <notes>
++ better check for errors thrown from
+Image_Text
++ updated examples
++ cosmetic changes
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>0.1.2</release>
+    <api>0.1.2</api>
+   </version>
+   <stability>alpha</stability>
+   <date>2005-01-26</date>
+   <license>PHP License</license>
+   <notes>
+Bugfix release
++ fixed bug #3271 (thanks to Justin)
++ some cosmetic changes
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>0.1.1</release>
+    <api>0.1.1</api>
+   </version>
+   <stability>alpha</stability>
+   <date>2004-11-08</date>
+   <license>PHP License</license>
+   <notes>
+Bugfix release (Int'l PHP Conference Edition)
++ fixed bug #2584 (thanks to wormus)
++ various small fixes
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>0.1.0</release>
+    <api>0.1.0</api>
+   </version>
+   <stability>alpha</stability>
+   <date>2004-10-21</date>
+   <license>PHP License</license>
+   <notes>
+Initial release (PHP World, Munich)
+   </notes>
+  </release>
+ </changelog>
+</package>

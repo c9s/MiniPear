@@ -35,7 +35,7 @@ class MiniPear_Progress_UpdatePackageTest extends PHPUnit_Framework_TestCase
     {
         $file = __DIR__ . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'package.xml';
         $xml = UpdatePackage::patchPackageXml( file_get_contents($file) , 'pear-local' );
-        echo $xml;
+        // echo $xml;
     }
 
     public function testSetChannelChangeTheChannelInPackage2Xml()
