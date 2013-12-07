@@ -15,10 +15,10 @@ MiniPear can create local pear channel mirrors for offline usage.
 - PHP 5.3+
 - php curl extension
 
-## Install through Pear channel
+## Install
 
-    $ sudo pear channel-discover pear.corneltek.com
-    $ sudo pear install corneltek/MiniPear
+    wget --no-check-certificate https://github.com/c9s/MiniPear/raw/master/minipear
+    chmod +x minipear
 
 ## Usage
 
