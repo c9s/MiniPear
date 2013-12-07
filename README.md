@@ -30,9 +30,9 @@ Print verbose / debug messages:
 
     $ minipear -d mirror {channel host}
 
-Mirror maintainer info section if you need:
+Mirror without maintainer info section if you need:
 
-    $ minipear mirror --info {channel host}
+    $ minipear mirror --no-info {channel host}
 
 Channel sites will be mirrored into ~/.minipear/pear/channels.
 

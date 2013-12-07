@@ -21,7 +21,7 @@ class MirrorCommand extends \CLIFramework\Command
         $opts->add('c|channel?','local channel hostname');
         $opts->add('a|alias?',  'local channel alias');
         $opts->add('all','mirror all packages');
-        $opts->add('info','mirror package info files.');
+        $opts->add('no-info','mirror without package info files.');
     }
 
     public function execute($host)
@@ -180,7 +180,7 @@ class MirrorCommand extends \CLIFramework\Command
          *    maintainers2.xml
          *
          */
-        if ( $options->info ) {
+        if ( ! $options->{'no-info'} ) {
             $logger->info('Mirroring package info section...');
             foreach( $packageList as $packageName ) {
                 $urls = array();
