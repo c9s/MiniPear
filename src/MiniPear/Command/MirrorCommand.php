@@ -21,6 +21,7 @@ class MirrorCommand extends \CLIFramework\Command
         $opts->add('c|channel?','local channel hostname');
         $opts->add('a|alias?',  'local channel alias');
         $opts->add('all','mirror all packages');
+        $opts->add('info','mirror package info files.');
     }
 
     public function execute($host)
@@ -179,25 +180,25 @@ class MirrorCommand extends \CLIFramework\Command
          *    maintainers2.xml
          *
          */
-        $logger->info('Mirroring package info section...');
-        foreach( $packageList as $packageName ) {
-            $urls = array();
-            $urls[] = $pearChannel->channelRestBaseUrl . '/p/' . strtolower($packageName) . '/info.xml';
-            $urls[] = $pearChannel->channelRestBaseUrl . '/p/' . strtolower($packageName) . '/maintainers.xml';
+        if ( $options->info ) {
+            $logger->info('Mirroring package info section...');
+            foreach( $packageList as $packageName ) {
+                $urls = array();
+                $urls[] = $pearChannel->channelRestBaseUrl . '/p/' . strtolower($packageName) . '/info.xml';
+                $urls[] = $pearChannel->channelRestBaseUrl . '/p/' . strtolower($packageName) . '/maintainers.xml';
 
-            if( version_compare($pearChannel->restType,'REST1.2') >= 0 ) {
-                $urls[] = $pearChannel->channelRestBaseUrl . '/p/' . strtolower($packageName) . '/maintainers2.xml';
-            }
-
-            foreach( $urls as $url ) {
-                if( $localFile = Utils::mirror_file( $url , $root ) ) {
-                    if( $sxml = Utils::load_xml_file( $localFile ) ) {
-                        $sxml->c = $localChannel;
-                        $sxml->asXML( $localFile );
+                if( version_compare($pearChannel->restType,'REST1.2') >= 0 ) {
+                    $urls[] = $pearChannel->channelRestBaseUrl . '/p/' . strtolower($packageName) . '/maintainers2.xml';
+                }
+                foreach( $urls as $url ) {
+                    if( $localFile = Utils::mirror_file( $url , $root ) ) {
+                        if( $sxml = Utils::load_xml_file( $localFile ) ) {
+                            $sxml->c = $localChannel;
+                            $sxml->asXML( $localFile );
+                        }
                     }
                 }
             }
-
         }
 
 
@@ -227,7 +228,7 @@ class MirrorCommand extends \CLIFramework\Command
          */
         $packageVersions = array();
 
-        $logger->info('Mirroring package info section...');
+        $logger->info('Mirroring package release section...');
         foreach( $packageList as $packageName ) {
             $base = $pearChannel->channelRestBaseUrl . '/r/' . strtolower($packageName); // . '/info.xml';
 
@@ -287,7 +288,7 @@ class MirrorCommand extends \CLIFramework\Command
 
             foreach( $versions as $version ) {
                 if ( $file = Utils::mirror_file( $base . '/deps.' . $version . '.txt', $root ) ) {
-                    file_put_contents( $file, Utils::patchDepDep( file_get_contents($file) ) );
+                    file_put_contents( $file, Utils::patchDepDep( file_get_contents($file), $host , $localChannel));
                 }
 
                 if( $localFile = Utils::mirror_file( $base . '/' . $version . '.xml' , $root ) ) {

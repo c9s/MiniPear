@@ -30,10 +30,16 @@ Print verbose / debug messages:
 
     $ minipear -d mirror {channel host}
 
+Mirror maintainer info section if you need:
+
+    $ minipear mirror --info {channel host}
+
 Channel sites will be mirrored into ~/.minipear/pear/channels.
 
 The channel host will be replaced by `{alias}-local`, you can install packages
 from these local pear hosts when you are offline, for example,
+
+    $ minipear -d mirror pear.php.net
 
 Install the hostname:
 

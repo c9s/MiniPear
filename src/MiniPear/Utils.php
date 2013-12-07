@@ -72,7 +72,7 @@ class Utils
 
     static function patchDepDep($content, $fromChannel, $toChannel) {
         $data = unserialize($content);
-        if ( isset($data['required']) ) {
+        if ( isset($data['required']) && isset($data['required']['package']) ) {
             $packages = isset($data['required']['package'][0]) ? $data['required']['package'] : array($data['required']['package']);
             foreach( $packages as & $pkg ) {
                 if ( isset($pkg['channel']) ) {
@@ -82,8 +82,8 @@ class Utils
                 }
             }
             $data['required']['package'] = $packages;
-
-
+        }
+        if ( isset($data['optional']) && isset($data['optional']['package']) ) {
             $packages = isset($data['optional']['package'][0]) ? $data['optional']['package'] : array($data['optional']['package']);
             foreach( $packages as & $pkg ) {
                 if ( isset($pkg['channel']) ) {
