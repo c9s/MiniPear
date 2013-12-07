@@ -153,12 +153,31 @@ class MirrorCommand extends \CLIFramework\Command
         if( $localFile = Utils::mirror_file( $pearChannel->categoriesXmlUrl , $root ) ) { //  mirror /rest/c/categories.xml
             if( $sxml = Utils::load_xml_file( $localFile ) ) {
                 $sxml->ch = $localChannel;
+
+                foreach ( $sxml->children()  as $child ) {
+                    if ( $child->getName() == 'c' ) {
+                        $categoryName = (string) $child;
+                        foreach ( $child->attributes('xlink', true) as $infoUrl ) {
+                            if ( $infoXmlFile = Utils::mirror_file( $pearChannel->channelBaseUrl . $infoUrl , $root ) ) {
+                                if( $infoXml = Utils::load_xml_file( $localFile ) ) {
+                                    $infoXml->c = $localChannel;
+                                    $infoXml->asXML( $infoXmlFile );
+                                }
+                            }
+                            if ( $packagesXmlFile = Utils::mirror_file( $pearChannel->channelBaseUrl . "/c/$categoryName/packages.xml" , $root ) ) {
+                            }
+                            if ( $packagesInfoXmlFile = Utils::mirror_file( $pearChannel->channelBaseUrl . "/c/$categoryName/packagesinfo.xml" , $root ) ) {
+                                file_put_contents( $packagesInfoXmlFile, str_replace($host, $localChannel,file_get_contents($packagesInfoXmlFile)) );
+                            }
+                        }
+                    }
+                }
+
+
                 $sxml->asXML( $localFile );
             }
         }
 
-
-        /** xxx: mirror categories **/
 
 
         /** get package list **/
@@ -180,6 +199,10 @@ class MirrorCommand extends \CLIFramework\Command
          *    maintainers2.xml
          *
          */
+
+        // mirror packages.xml for remote-list -c command
+        Utils::mirror_file( $pearChannel->channelRestBaseUrl . '/p/packages.xml' , $root );
+
         if ( ! $options->{'no-info'} ) {
             $logger->info('Mirroring package info section...');
             foreach( $packageList as $packageName ) {
