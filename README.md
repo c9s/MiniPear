@@ -53,6 +53,17 @@ Install through the pear-local:
 
     $ sudo pear install pear-local/Archive_Tar
 
+
+## Contribution
+
+Fork this project and send me the pull request.
+
+Required development dependencies:
+
+    pear channel-discover pear.corneltek.com
+    pear install corneltek/PHPUnit_TestMore
+    pear install corneltek/Universal
+
 ## Author 
 
 Yo-An Lin <yoanlin93@gmail.com>
