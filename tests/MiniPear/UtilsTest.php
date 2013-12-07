@@ -2,6 +2,16 @@
 
 class UtilsTest extends PHPUnit_Framework_TestCase
 {
+
+
+    function testPatchDepDep()
+    {
+        $content = file_get_contents('http://pear.php.net/rest/r/text_captcha/deps.0.5.0.txt');
+        $content = \MiniPear\Utils::patchDepDep($content, 'pear.php.net', 'pear-local');
+        ok($content);
+        // var_dump( unserialize($content) ); 
+    }
+
     function test()
     {
 

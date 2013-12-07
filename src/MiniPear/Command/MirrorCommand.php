@@ -1,6 +1,6 @@
 <?php
 namespace MiniPear\Command;
-// use SimpleXMLElement;
+use SimpleXMLElement;
 use DOMDocument;
 use MiniPear\CurlDownloader;
 use MiniPear\Utils;
@@ -286,22 +286,23 @@ class MirrorCommand extends \CLIFramework\Command
             }
 
             foreach( $versions as $version ) {
-                Utils::mirror_file( $base . '/deps.' . $version . '.txt', $root );
+                if ( $file = Utils::mirror_file( $base . '/deps.' . $version . '.txt', $root ) ) {
+                    file_put_contents( $file, Utils::patchDepDep( file_get_contents($file) ) );
+                }
 
                 if( $localFile = Utils::mirror_file( $base . '/' . $version . '.xml' , $root ) ) {
                     if( $sxml = Utils::load_xml_file( $localFile ) ) {
                         $sxml->c = $localChannel;
+
+                        // replace something like <g>http://pear.php.net/get/CodeGen-1.0.7</g>
                         $sxml->g = str_replace( $pearChannel->name, $localChannel , (string) $sxml->g );
                         $sxml->asXML( $localFile );
                     }
                 }
 
-
-
                 if( $localFile = Utils::mirror_file( $base . '/package.' . $version . '.xml' , $root ) ) {
-                    if( $sxml = Utils::load_xml_file( $localFile ) ) {
-                        $sxml->channel = $localChannel;
-                        $sxml->asXML( $localFile );
+                    if ( $xml = Utils::patchPackageXml( $localFile, $localChannel ) ) {
+                        file_put_contents($localFile, $xml);
                     }
                 }
 

@@ -1,6 +1,8 @@
 <?php
 
 use MiniPear\Progress\UpdatePackage;
+use MiniPear\Utils;
+
 require 'Archive/Tar.php';
 class MiniPear_Progress_UpdatePackageTest extends PHPUnit_Framework_TestCase
 {
@@ -34,7 +36,7 @@ class MiniPear_Progress_UpdatePackageTest extends PHPUnit_Framework_TestCase
     public function testPackageXmlRewrite()
     {
         $file = __DIR__ . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'package.xml';
-        $xml = UpdatePackage::patchPackageXml( file_get_contents($file) , 'pear-local' );
+        $xml = Utils::patchPackageXml( file_get_contents($file) , 'pear-local' );
         // echo $xml;
     }
 
