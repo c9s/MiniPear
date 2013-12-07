@@ -33,14 +33,30 @@ Print verbose / debug messages:
 Channel sites will be mirrored into ~/.minipear/pear/channels.
 
 The channel host will be replaced by `{alias}-local`, you can install packages
-from these local pear hosts when you are offline.
+from these local pear hosts when you are offline, for example,
 
-For example:
+Install the hostname:
+
+    vim /etc/hosts
+
+Add 127.0.0.1 pear-local
+
+    127.0.0.1 pear-local
+
+Install your virtual host to the hostname `pear-local`.
+
+Then use pear to channel-discover:
 
     $ sudo pear channel-discover pear-local
-    $ sudo pear install pear-local/Archive_Tar
 
+Install through the pear-local:
+
+    $ sudo pear install pear-local/Archive_Tar
 
 ## Author 
 
-Yo-An Lin <cornelius.howl@gmail.com>
+Yo-An Lin <yoanlin93@gmail.com>
+
+## LICENSE
+
+MIT License
