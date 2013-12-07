@@ -4,8 +4,8 @@ use CLIFramework\Application as ConsoleApplication;
 
 class Console extends ConsoleApplication
 {
-    const app_name = 'minipear';
-    const app_version = '0.0.2';
+    const name = 'minipear';
+    const version = '1.0.0';
 
     function init()
     {
